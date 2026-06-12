@@ -73,6 +73,7 @@ function Login() {
                     Connexion
                 </button>
             </form>
+            <p className="text-white flex mr-0.5 ">Si vous n'avez pas une compte veuillez <Link to={"/register"} className="text-[var(--secondary)] cursor-pointer"> S'inscrire</Link></p>
         </div>
     );
 }

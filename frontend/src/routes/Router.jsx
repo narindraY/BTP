@@ -6,7 +6,8 @@ import Login from "../Pages/Auth/Login";
 import AddPublication from "../Pages/Publication/AddPublication";
 import ListPublication from "../Pages/Publication/ListPublication";
 import Layout from "../Components/Layout"
-import Budget from "../Pages/Finance/Budget";
+import Test from "../test";
+//import Budget from "../Pages/Finance/Budget";
 function Router() {
     return (  
         <Routes>
@@ -17,10 +18,12 @@ function Router() {
             <Route element={<Layout/>} >
             <Route path="/publication/create" element={<AddPublication/>} ></Route>
             <Route path="/publication/list" element={<ListPublication/>} ></Route>
-            <Route path="/finance" element={<Budget/>} ></Route>
+            <Route path="/user" element={<Test/>} ></Route>
+            
             </Route>
         </Routes>
-    );
+    );        
 }
 
 export default Router;
+//<Route path="/finance" element={<Budget/>} ></Route>
