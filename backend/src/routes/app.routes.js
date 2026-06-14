@@ -9,6 +9,7 @@ const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 
 const { createPub, listPub } = require("../controllers/publication.controller");
+const { postMessage, getHistory, getDiscussions, startDiscussion, uploadFile, editMessage, deleteMessage } = require("../controllers/chat.controller");
 const {
   getBudgetInit,
   getSpendProject,
@@ -41,6 +42,15 @@ router.get("/user/profile", auth, (req, res) => res.json(req.user));
 
 router.post("/publication/create", upload.single("img"), createPub);
 router.get("/publication/list", listPub);
+
+// Routes pour le Chat
+router.get("/chat/discussions", auth, getDiscussions);
+router.post("/chat/start", auth, startDiscussion);
+router.post("/chat/send", auth, postMessage);
+router.get("/chat/history", auth, getHistory);
+router.post("/chat/upload", auth, upload.single("file"), uploadFile);
+router.put("/chat/message/:id", auth, editMessage);
+router.delete("/chat/message/:id", auth, deleteMessage);
 
 router.get("/finance/budget", getBudgetInit);
 router.get("/finance/spend", getSpendProject);

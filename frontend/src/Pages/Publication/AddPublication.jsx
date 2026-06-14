@@ -31,9 +31,9 @@ function AddPublication() {
         const token = localStorage.getItem("token");
         const formData = new FormData();
         formData.append("titre", data.titre);
-        formData.append("contenu", data.contenu);
-        formData.append("statut", data.statut);
+        formData.append("description", data.contenu);
         formData.append("img", data.img);
+
         try {
             await axios.post(`${base_url}/publication/create`, formData, {
                 headers: {
@@ -43,7 +43,7 @@ function AddPublication() {
             });
             navigate("/publication/list");
         } catch (error) {
-            console.log("error create pub", error);
+            console.log("Erreur création publication", error);
         } finally {
             setLoading(false);
         }

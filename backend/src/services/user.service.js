@@ -1,14 +1,17 @@
 const bcrypt = require('bcrypt');
-const {createUser,findUser,findUserByContact,findUserByGoogleId,createGoogleUser} = require("../models/user.models");
+const {createUser,findUser,findUserByContact,findUserByGoogleId,findUserByEmail,createGoogleUser} = require("../models/user.models");
 
 const generateToken = require("../utils/generateToken");
 const registerUser = async (connection, data) => {
     const hash = await bcrypt.hash(data.password, 10);
 
     const userData = {
-        nom_user: data.nom_user,
+        nom: data.nom,
+        email: data.email,
         contact: data.contact,
-        password: hash
+        mot_de_passe: hash,
+        role: "user",
+        actif: true
     };
 
     return await createUser(connection, userData);
@@ -19,7 +22,7 @@ const login = async (connection, contact, password) => {
     if (!user) {
         throw new Error("user not found");
     }
-    const match = await bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, user.mot_de_passe);
 
     if (!match) {
         throw new Error("password incorrect");
@@ -28,8 +31,8 @@ const login = async (connection, contact, password) => {
     return {
         token,
         user: {
-            id_user: user.id_user,
-            nom_user: user.nom_user,
+            id_utilisateur: user.id_utilisateur,
+            nom: user.nom,
             contact: user.contact,
             role: user.role
         }
@@ -39,29 +42,23 @@ const login = async (connection, contact, password) => {
 const googleLogin = async (connection, profile) => {
     const email = profile.emails?.[0]?.value;
 
-    let user = await findUserByGoogleId(connection, profile.id);
-
-    if (user) {
-        return user;
-    }
-    user = await findUserByContact(connection, email);
+    // Searching by email since google_id is missing in the new schema
+    let user = await findUserByEmail(connection, email);
 
     if (user) {
         return user;
     }
 
     const userData = {
-        nom_user: profile.displayName,
-        contact: email,
-        google_id: profile.id
+        nom: profile.displayName,
+        email: email,
+        mot_de_passe: 'google-auth', // placeholder since it's required in schema
+        role: "user",
+        actif: true
     };
 
-    const result = await createGoogleUser(connection, userData);
-
-    return {
-        id_user: result.insertId,
-        ...userData
-    };
+    await createGoogleUser(connection, userData);
+    return await findUserByEmail(connection, email);
 };
 
 module.exports = {registerUser,login,googleLogin};

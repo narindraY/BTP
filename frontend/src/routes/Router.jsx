@@ -7,16 +7,15 @@ import Login from "../Pages/Auth/Login";
 import AddPublication from "../Pages/Publication/AddPublication";
 import ListPublication from "../Pages/Publication/ListPublication";
 import Layout from "../Components/Layout"
-import Test from "../test";
+import Test from "../Test";
 import Budget from "../Pages/Finance/Budget";
-
-//import LayoutUser from "../Components/LayoutUser";
 import Client from "../Pages/Home/Client";
 import List from "../Pages/Home/List";
 import About from "../Pages/Home/About";
 import Contact from "../Pages/Home/Contact";
 import bg from "../assets/bg.png"
 import LayoutUser from "../Components/LayoutUser";
+import Chat from "../Pages/Chat/Chat";
 function Router() {
     const location = useLocation();
     return (  
@@ -29,6 +28,7 @@ function Router() {
             <Route path="/publication/create" element={<AddPublication/>} ></Route>
             <Route path="/publication/list" element={<ListPublication/>} ></Route>
             <Route path="/finance" element={<Budget/>} ></Route>
+            <Route path="/chat" element={<Chat/>} ></Route>
             </Route>
           
         <Route element={<LayoutUser/>}>

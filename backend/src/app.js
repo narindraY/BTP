@@ -11,7 +11,7 @@ const AllRoutes = require("./routes/app.routes");
 const session = require("express-session");
 const app = express();
 const corsOptions = {
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
     methods: ["GET", "POST","PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }

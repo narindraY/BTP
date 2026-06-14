@@ -1,9 +1,9 @@
 const validateRegister = (req, res, next) => {
-    const { nom_user, contact, password } = req.body;
+    const { nom, email, contact, password } = req.body;
 
-    if (!nom_user || !contact || !password) {
+    if (!nom || !email || !password) {
         return res.status(400).json({
-            message: "nom_user, contact et password obligatoires"
+            message: "nom, email et mot de passe sont obligatoires"
         });
     }
 
@@ -14,7 +14,7 @@ const validateGoogleUser = (req, res, next) => {
 
     if (!user || !user.id) {
         return res.status(400).json({
-            message: "Invalid Google user"
+            message: "L'utilisateur google est invalide"
         });
     }
 

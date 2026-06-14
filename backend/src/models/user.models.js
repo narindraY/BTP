@@ -1,9 +1,7 @@
 const createUser = (connection, data) => {
-    data.role = "user";
-    data.provider = "local"
     return new Promise((resolve, reject) => {
         connection.query(
-            "INSERT INTO user SET ?", data, (err, res) => {
+            "INSERT INTO utilisateur SET ?", data, (err, res) => {
                 if (err) return reject(err);
                 resolve(res);
             }
@@ -14,7 +12,7 @@ const createUser = (connection, data) => {
 const findUser = (connection, contact) => {
     return new Promise((resolve, reject) => {
         connection.query(
-            "SELECT * FROM user WHERE contact = ?", [contact],
+            "SELECT * FROM utilisateur WHERE contact = ?", [contact],
             (err, res) => {
                 if (err) return reject(err)
                 resolve(res[0]);
@@ -25,7 +23,18 @@ const findUser = (connection, contact) => {
 
 const findUserByContact = (connection, contact) => {
     return new Promise((resolve, reject) => {
-        connection.query("SELECT * FROM user WHERE contact = ?", [contact],
+        connection.query("SELECT * FROM utilisateur WHERE contact = ?", [contact],
+            (err, res) => {
+                if (err) return reject(err);
+                resolve(res[0]);
+            }
+        );
+    });
+};
+
+const findUserByEmail = (connection, email) => {
+    return new Promise((resolve, reject) => {
+        connection.query("SELECT * FROM utilisateur WHERE email = ?", [email],
             (err, res) => {
                 if (err) return reject(err);
                 resolve(res[0]);
@@ -35,10 +44,8 @@ const findUserByContact = (connection, contact) => {
 };
 
 const createGoogleUser = (connection, data) => {
-    data.role = "user";
-    data.provider = "google";
     return new Promise((resolve, reject) => {
-        connection.query("INSERT INTO user SET ?", data,
+        connection.query("INSERT INTO utilisateur SET ?", data,
             (err, res) => {
                 if (err) return reject(err);
                 resolve(res);
@@ -49,7 +56,8 @@ const createGoogleUser = (connection, data) => {
 
 const findUserByGoogleId = (connection, googleId) => {
     return new Promise((resolve, reject) => {
-        connection.query("SELECT * FROM user WHERE google_id = ?", [googleId],
+        // Note: The new schema doesn't have google_id, we might need to add it or use email
+        connection.query("SELECT * FROM utilisateur WHERE email = ?", [googleId],
             (err, res) => {
                 if (err) return reject(err);
                 resolve(res[0]); 
@@ -58,4 +66,4 @@ const findUserByGoogleId = (connection, googleId) => {
     });
 };
 
-module.exports = { createUser, findUser, findUserByGoogleId, findUserByContact,createGoogleUser };
+module.exports = { createUser, findUser, findUserByGoogleId, findUserByContact, findUserByEmail, createGoogleUser };

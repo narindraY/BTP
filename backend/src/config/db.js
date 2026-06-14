@@ -2,10 +2,16 @@ const mysql = require("mysql");
 const myConnection = require("express-myconnection");
 
 const options = {
-    host: "localhost",
-    user: "root",
-    database: "btp",
-    password: ""
+    host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "root",
+    database: process.env.DB_NAME || "btp",
+    password: process.env.DB_PASSWORD || ""
+};
+
+module.exports = {
+    mysql,
+    myConnection,
+    options
 };
 
 const testConnection = mysql.createConnection(options);

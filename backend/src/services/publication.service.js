@@ -2,9 +2,9 @@ const {createPublication, getPublication} = require("../models/publication.model
 const publication = async (connection, data) =>{
     const publicationData = {
         titre: data.titre,
-        contenu: data.contenu,
+        description: data.description,
         img: data.img,
-        statut: data.statut
+        utilisateur_id: data.utilisateur_id
     };
     return await createPublication(connection, publicationData);
 };

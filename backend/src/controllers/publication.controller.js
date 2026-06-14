@@ -1,4 +1,6 @@
 const {publication, getPub} = require("../services/publication.service");
+const auth = require("../middleware/auth"); // Si besoin mais il est déjà protégé par la route
+
 const createPub = (req, res) => {
   req.getConnection(async (err, connection) => {
     if (err) {
@@ -8,20 +10,17 @@ const createPub = (req, res) => {
     try {
       const data = {
         titre: req.body.titre,
-        contenu: req.body.contenu,
-        statut: req.body.statut,
+        description: req.body.description || req.body.contenu, // Support des deux noms
         img: req.file ? req.file.filename : null,
+        utilisateur_id: req.user ? req.user.id : null // On récupère l'ID de l'utilisateur connecté via le middleware auth
       };
 
       await publication(connection, data);
 
       res.status(200).json({ message: "pub create succes" });
 
-      console.log("FILE:", req.file);
-      console.log("BODY:", req.body);
-
     } catch (error) {
-      res.status(500).json({ message: "errorrrrr" });
+      res.status(500).json({ message: error.message || "errorrrrr" });
     }
   });
 };
