@@ -9,14 +9,26 @@ import ListPublication from "../Pages/Publication/ListPublication";
 import Layout from "../Components/Layout"
 import Test from "../test";
 import Budget from "../Pages/Finance/Budget";
-
-//import LayoutUser from "../Components/LayoutUser";
 import Client from "../Pages/Home/Client";
 import List from "../Pages/Home/List";
 import About from "../Pages/Home/About";
 import Contact from "../Pages/Home/Contact";
 import bg from "../assets/bg.png"
 import LayoutUser from "../Components/LayoutUser";
+//route madio
+import Dashboard from "../Pages/Dashboard/Dashboard";
+import Contrats from "../Pages/Contrats/Contrats";
+//Narindra - Nate
+//import 'bootstrap/dist/css/bootstrap.min.css';
+
+    
+import Projets from "../Pages/Projets/Projet";
+import Ressources from "../Pages/Ressources/Ressources";
+
+import Rapports from "../Pages/Rapports/Rapports";
+import Suivi from "../Pages/Suivi/Suivi";
+import AddSuiviPage from "../Pages/Suivi/AddSuiviPage";
+
 function Router() {
     const location = useLocation();
     return (  
@@ -29,6 +41,19 @@ function Router() {
             <Route path="/publication/create" element={<AddPublication/>} ></Route>
             <Route path="/publication/list" element={<ListPublication/>} ></Route>
             <Route path="/finance" element={<Budget/>} ></Route>
+            {/** route madio */}
+            <Route path="/dashboard"element={<Dashboard />} />
+            <Route path="/contrats/*" element={<Contrats />} />
+            <Route path="/projets"      element={<Projets/>} />
+             <Route path="/ressources"   element={<Ressources />} />
+            
+             <Route path="/rapports"     element={<Rapports/>} />
+             <Route path="/suivi/*"        element={<Suivi/>} />
+             <Route path="/suivis/add" element={<AddSuiviPage/>} ></Route>
+            {/** 
+             * 
+             */}
+
             </Route>
           
         <Route element={<LayoutUser/>}>
@@ -54,3 +79,23 @@ function Router() {
 
 export default Router;
 //<Route path="/finance" element={<Budget/>} ></Route>
+
+
+
+
+
+
+
+          {/*
+            
+            <Route path="/projets"      element={<Projets />} />
+           
+            <Route path="/contrats"     element={<ComingSoon title="Contrats" />} />
+            
+            <Route path="/finance"      element={<ComingSoon title="Finance" />} />
+            
+            <Route path="/utilisateurs" element={<ComingSoon title="Utilisateurs" />} />
+            <Route path="/parametres"   element={<ComingSoon title="Paramètres" />} />
+            <Route path="*"             element={<ComingSoon title="Page non trouvée" />} />
+            */}
+        

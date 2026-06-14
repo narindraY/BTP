@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Voice</title>
+</head>
+<body>
+
+<textarea id="text">
+Bonjour, ceci est un message avec une voix naturelle.
+</textarea>
+
+<button id="playBtn">
+  🔊 Lire le message
+</button>
+
+<script>
+const button = document.getElementById("playBtn");
+const text = document.getElementById("text");
+
+let voices = [];
+
+function loadVoices() {
+  voices = speechSynthesis.getVoices();
+}
+
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+
+button.addEventListener("click", () => {
+  const utterance = new SpeechSynthesisUtterance(text.value);
+
+  utterance.lang = "fr-FR";
+  utterance.rate = 0.9;  // vitesse
+  utterance.pitch = 0.85; // voix plus grave
+
+  // cherche une voix masculine française si dispo
+  const maleVoice = voices.find(v =>
+    v.lang.includes("fr") &&
+    (
+      v.name.toLowerCase().includes("male") ||
+      v.name.toLowerCase().includes("homme") ||
+      v.name.toLowerCase().includes("thomas") ||
+      v.name.toLowerCase().includes("henri")
+    )
+  );
+
+  if (maleVoice) {
+    utterance.voice = maleVoice;
+  }
+
+  speechSynthesis.cancel(); // stoppe une ancienne lecture
+  speechSynthesis.speak(utterance);
+});
+</script>
+
+</body>
+</html>

@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
     "axios": "^1.17.0",
+    "bootstrap": "^5.3.8",
     "chart.js": "^4.5.1",
     "framer-motion": "^12.40.0",
     "react": "^19.2.5",

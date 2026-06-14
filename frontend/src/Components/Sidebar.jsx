@@ -2,7 +2,7 @@ import {NavLink} from "react-router-dom";
 import { SidebarItems} from "./SidebarItems";
 function Sidebar() {
     return ( 
-        <aside className="w-48 h-screen bg-gray-800 text-white">
+        <aside className="w-50 h-screen bg-gray-800 text-white">
             <ul className="p-4">{
                 SidebarItems.map((item)=>{
                     const Icon = item.icon;

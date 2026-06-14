@@ -10,7 +10,6 @@ const findBudget = (connection) =>{
         );
     });
 };
-
 const findDSpending = (connection) =>{
     return new Promise((resolve, reject) =>{
         connection.query("SELECT SUM(quantite * prix_unitaire) AS spending FROM ressource",
