@@ -1,5 +1,5 @@
 import { FaCheck, FaClock, FaHome } from "react-icons/fa";
-import{FiBook, FiDollarSign, FiFileText, FiHome, FiSettings} from "react-icons/fi"
+import{FiBarChart, FiBook, FiDollarSign, FiFileText, FiHome, FiSettings} from "react-icons/fi"
 import { MdAddCircleOutline, MdPerson } from "react-icons/md";
 export const SidebarItems = [
     {
@@ -36,6 +36,11 @@ export const SidebarItems = [
         path:"/client",
         title:"Clients",
         icon:MdPerson
+    },
+    {
+        path:"/chat",
+        title: "Message",
+        icon: FiBarChart
     },
     {
         path:"/rapports",

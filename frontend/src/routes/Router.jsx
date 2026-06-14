@@ -28,6 +28,7 @@ import Ressources from "../Pages/Ressources/Ressources";
 import Rapports from "../Pages/Rapports/Rapports";
 import Suivi from "../Pages/Suivi/Suivi";
 import AddSuiviPage from "../Pages/Suivi/AddSuiviPage";
+import Chat from "../Pages/Chat/Chat";
 
 function Router() {
     const location = useLocation();
@@ -50,6 +51,7 @@ function Router() {
              <Route path="/rapports"     element={<Rapports/>} />
              <Route path="/suivi/*"        element={<Suivi/>} />
              <Route path="/suivis/add" element={<AddSuiviPage/>} ></Route>
+             <Route path="/chat" element={<Chat/>} ></Route>
             {/** 
              * 
              */}
