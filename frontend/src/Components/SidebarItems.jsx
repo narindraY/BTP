@@ -1,3 +1,4 @@
+import { FaClock } from "react-icons/fa";
 import{FiDollarSign, FiFileText, FiHome} from "react-icons/fi"
 export const SidebarItems = [
     {
@@ -14,5 +15,14 @@ export const SidebarItems = [
         path:"/finance",
         title:"Finance",
         icon: FiDollarSign,
-    },
+    }
+];
+export const ItemesUsers = [
+    
+    {
+        path:"/user",
+        title:"kkk",
+        icon:FaClock,
+    
+    }
 ];

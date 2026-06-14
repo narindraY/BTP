@@ -1,5 +1,6 @@
-import { Route, Routes } from "react-router-dom";
-import Client from "../Client";
+import {AnimatePresence} from "framer-motion"
+import { Route, Routes, useLocation } from "react-router-dom";
+
 import Google from "../Pages/Auth/Google";
 import Register from "../Pages/Auth/Register";
 import Login from "../Pages/Auth/Login";
@@ -8,10 +9,19 @@ import ListPublication from "../Pages/Publication/ListPublication";
 import Layout from "../Components/Layout"
 import Test from "../test";
 import Budget from "../Pages/Finance/Budget";
+
+//import LayoutUser from "../Components/LayoutUser";
+import Client from "../Pages/Home/Client";
+import List from "../Pages/Home/List";
+import About from "../Pages/Home/About";
+import Contact from "../Pages/Home/Contact";
+import bg from "../assets/bg.png"
+import LayoutUser from "../Components/LayoutUser";
 function Router() {
+    const location = useLocation();
     return (  
+       <>
         <Routes>
-            <Route path="/" element={<Client/>} />
             <Route path="/google" element={<Google/>}></Route>
             <Route path="/register" element={<Register/>}></Route>
             <Route path="/login" element={<Login/>} ></Route>
@@ -19,9 +29,26 @@ function Router() {
             <Route path="/publication/create" element={<AddPublication/>} ></Route>
             <Route path="/publication/list" element={<ListPublication/>} ></Route>
             <Route path="/finance" element={<Budget/>} ></Route>
-            <Route path="/user" element={<Test/>} ></Route>          
             </Route>
+          
+        <Route element={<LayoutUser/>}>
+
+            <Route path="/user" element={<Test/>} ></Route>        
+        </Route>
         </Routes>
+          
+           <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+            <Route  style={{ background: `url(${bg})` }} >
+            <Route path="/" element={<Client/>} />
+            <Route path="/user/publication" element={<List/>} > </Route>
+            <Route path="/about" element={<About/>} ></Route>
+            <Route path="/contact" element={<Contact/>} ></Route>
+            </Route>
+           
+            </Routes>
+           </AnimatePresence>
+       </>
     );        
 }
 
