@@ -1,6 +1,6 @@
 import { FaCheck, FaClock, FaHome } from "react-icons/fa";
-import{FiBarChart, FiBook, FiDollarSign, FiFileText, FiHome, FiSettings} from "react-icons/fi"
-import { MdAddCircleOutline, MdPerson } from "react-icons/md";
+import{ FiBook, FiDollarSign, FiFileText, FiHome, FiSettings} from "react-icons/fi"
+import { MdAddCircleOutline, MdMessage, MdPerson } from "react-icons/md";
 export const SidebarItems = [
     {
         path:"/dashboard",
@@ -33,14 +33,9 @@ export const SidebarItems = [
         icon:FiBook,
     },
     {
-        path:"/client",
-        title:"Clients",
-        icon:MdPerson
-    },
-    {
         path:"/chat",
         title: "Message",
-        icon: FiBarChart
+        icon: MdMessage
     },
     {
         path:"/rapports",
