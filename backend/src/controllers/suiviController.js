@@ -1,4 +1,4 @@
-const db = require("../config/db.narindra");
+const db = require("../config/db.nante");
 
 // ➕ Créer un suivi
 exports.createSuivi = (req, res) => {
