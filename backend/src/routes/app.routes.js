@@ -21,6 +21,8 @@ const resourceController = require('../controllers/resourceController');
 const suiviController = require("../controllers/suiviController");
 const contratController = require("../controllers/contratController");
 const rapportController = require("../controllers/rapportController");
+const {sendContact} = require("../controllers/contact.controller")
+//router.post("/send/contact", sendContact);
 
 const upload = require("../config/multer");
 
@@ -95,5 +97,6 @@ router.get("/finance/spend", getSpendProject);
 router.get("/finance/balance", getBalaceProject);
 
 router.get("/admin", admin);
+router.post("/send/contact", sendContact);
 
 module.exports = router;
