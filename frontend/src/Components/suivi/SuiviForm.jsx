@@ -27,7 +27,7 @@ export default function SuiviForm() {
       data.append("tache_id", formData.tache_id);
       data.append("avancement", formData.avancement);
       data.append("commentaire", formData.commentaire);
-      if (formData.photo) data.append("photo", formData.photo);
+      if (formData.photo) data.append("file", formData.photo);
 
       await api.post("/create/suivis", data, {
         headers: { "Content-Type": "multipart/form-data" }

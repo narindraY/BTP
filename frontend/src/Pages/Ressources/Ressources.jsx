@@ -1,7 +1,7 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ResourceTable from '../../components/ressources/RessourceTable';
-import ResourceForm  from '../../components/ressources/RessourceForm';
+import ResourceForm from '../../components/ressources/RessourceForm';
 import { base_url } from '../../Utils/IP';
 
 const TABS = [
@@ -9,12 +9,6 @@ const TABS = [
   { label: "Main-d'œuvre", value: "Main-d'œuvre" },
   { label: "Équipements",  value: "Équipement" },
 ];
-
-
-//router.get('/ressource/getall', resourceController.getAllResources);
-//router.post('/ressource/create', resourceController.addResource);
-//router.put('/ressource/update/:id', resourceController.updateResource);
-//router.delete('/ressource/delete/:id', resourceController.deleteResource);
 
 const Ressources = () => {
   const [resources, setResources]             = useState([]);
@@ -33,7 +27,6 @@ const Ressources = () => {
         ? res.data
         : res.data?.data ?? res.data?.resources ?? res.data?.ressources ?? [];
       setResources(list);
-      console.log("ok")
     } catch (err) {
       console.error("Erreur fetch ressources:", err);
       setError("Impossible de charger les ressources.");
@@ -81,20 +74,24 @@ const Ressources = () => {
   };
 
   return (
-    <div className="container-fluid py-4">
+    <div className="w-full px-6 py-8">
 
-      <h1 className="h4 fw-bold text-dark mb-4">Ressources</h1>
+      <h1 className="text-xl font-bold text-gray-800 mb-6">Ressources</h1>
 
-      <div className="card border-0 shadow-sm" style={{ borderRadius: "16px", width: "100%" }}>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 w-full">
 
-        <div className="card-header bg-white border-bottom px-3 pt-3 pb-0">
-          <ul className="nav nav-tabs border-0">
+        {/* Tabs header */}
+        <div className="border-b border-gray-200 px-4 pt-3">
+          <ul className="flex gap-1">
             {TABS.map(tab => (
-              <li className="nav-item" key={tab.value}>
+              <li key={tab.value}>
                 <button
-                  className={`nav-link fw-semibold border-0 ${activeTab === tab.value ? "active text-primary" : "text-muted"}`}
                   onClick={() => setActiveTab(tab.value)}
-                  style={{ fontSize: "14px" }}
+                  className={`px-4 py-2 text-sm font-semibold rounded-t-lg border-b-2 transition-colors duration-150
+                    ${activeTab === tab.value
+                      ? "border-blue-600 text-blue-600"
+                      : "border-transparent text-gray-400 hover:text-gray-600 hover:border-gray-300"
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -103,9 +100,10 @@ const Ressources = () => {
           </ul>
         </div>
 
-        <div className="card-body p-0">
+        {/* Table body */}
+        <div>
           {error ? (
-            <div className="text-center text-danger py-4" style={{ fontSize: "14px" }}>{error}</div>
+            <p className="text-center text-red-500 text-sm py-8">{error}</p>
           ) : (
             <ResourceTable
               resources={resources}
@@ -116,8 +114,12 @@ const Ressources = () => {
           )}
         </div>
 
-        <div className="card-footer bg-white border-top d-flex justify-content-end py-3 px-3">
-          <button className="btn btn-primary fw-semibold" onClick={handleOpenAdd}>
+        {/* Footer */}
+        <div className="border-t border-gray-100 flex justify-end px-4 py-3">
+          <button
+            onClick={handleOpenAdd}
+            className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors duration-150"
+          >
             + Ajouter
           </button>
         </div>

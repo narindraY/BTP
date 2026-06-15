@@ -20,6 +20,7 @@ const dashboardController = require('../controllers/dashboardController');
 const resourceController = require('../controllers/resourceController');
 const suiviController = require("../controllers/suiviController");
 const contratController = require("../controllers/contratController");
+const rapportController = require("../controllers/rapportController");
 
 const upload = require("../config/multer");
 
@@ -58,7 +59,7 @@ router.get('/:id/taches', projectController.getProjectTasks);
 router.post('/create/suivis',upload.single("file"),  projectController.addSuivi);
 router.get('/stats', dashboardController.getStats);
 router.get('/ressource/getall', resourceController.getAllResources);
-router.post('/', resourceController.addResource);
+router.post('/ressource/create', resourceController.addResource);
 router.put('/:id', resourceController.updateResource);
 router.delete('/:id', resourceController.deleteResource);
 //Nante
@@ -73,6 +74,11 @@ router.get("/:id", contratController.getContratById);
 router.put("/:id", contratController.updateContrat);
 router.delete("/:id", contratController.deleteContrat);
 
+router.get("/rapports/journalier/pdf", rapportController.generateRapportJournalier);
+router.get("/rapports/mensuel/pdf", rapportController.generateRapportMensuel);
+router.get("/rapports/financier/pdf", rapportController.generateRapportFinancier);
+
+module.exports = router;
 
 
 // Routes pour le Chat
