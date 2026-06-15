@@ -71,4 +71,9 @@ export const ItemesUsers = [
         title: "Message",
         icon: MdMessage
     },
+      {
+        path:"/pub/user",
+        title:"Actualites",
+        icon:FiFileText,
+    },
 ];
