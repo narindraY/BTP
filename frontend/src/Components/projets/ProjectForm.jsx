@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FiX, FiAlertCircle, FiLoader, FiCalendar, FiDollarSign, FiFileText } from 'react-icons/fi';
 
-const API = "http://localhost:5173/api";
+const API = "http://localhost:3000/api";
 const TYPES_PROJET = ["Bâtiment", "Route", "Pont", "Infrastructure", "Autre"];
 
 const Label = ({ children, required }) => (
@@ -38,7 +38,7 @@ const ProjectForm = ({ show, handleClose, onProjectCreated }) => {
   const fetchContrats = async () => {
     try {
       setLoading(true);
-      const res  = await axios.get(`${API}/projects/contrats`);
+      const res  = await axios.get(`${API}/get/contrats`);
       const list = Array.isArray(res.data) ? res.data : res.data?.data ?? res.data?.contrats ?? [];
       setContrats(list);
     } catch {
@@ -59,7 +59,7 @@ const ProjectForm = ({ show, handleClose, onProjectCreated }) => {
     try {
       setSaving(true);
       setError(null);
-      await axios.post(`${API}/projects`, formData);
+      await axios.post(`${API}/create/projects`, formData);
       handleClose();
       if (onProjectCreated) onProjectCreated();
     } catch (err) {

@@ -6,7 +6,7 @@ const API = axios.create({
 });
 
 
-export const getContrats = () => API.get("/contrats");
+export const getContrats = () => API.get("/get/contrats");
 export const getContratById = (id) => API.get(`/contrats/${id}`);
 export const addContrat = (data) => API.post("/contrats", data);
 export const updateContrat = (id, data) => API.put(`/contrats/update/${id}`, data);

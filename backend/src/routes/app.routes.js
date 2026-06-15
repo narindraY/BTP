@@ -3,7 +3,7 @@ const router = express.Router();
 //const passport = require("passport");
 const passport = require("../config/passport")
 
-const { register, loginUser, googleAuth } = require("../controllers/user.controller");
+const { register, loginUser, googleAuth, deleteUser, updateUser, getMe } = require("../controllers/user.controller");
 const { validateRegister } = require("../validation/user.validation");
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
@@ -19,6 +19,7 @@ const projectController = require('../controllers/projectController');
 const dashboardController = require('../controllers/dashboardController');
 const resourceController = require('../controllers/resourceController');
 const suiviController = require("../controllers/suiviController");
+const contratController = require("../controllers/contratController");
 
 const upload = require("../config/multer");
 
@@ -42,30 +43,37 @@ router.get(
 router.post("/user/register", validateRegister, register);
 router.post("/user/login", loginUser);
 router.get("/user/profile", auth, (req, res) => res.json(req.user));
-
-
 router.post("/publication/create", upload.single("img"), createPub);
 router.get("/publication/list", listPub);
-
+router.delete("/delete/user", deleteUser);
+router.put("/update/user/:id", updateUser)
+router.get("/me", getMe)
 
 //Narindra
 router.get('/projects',projectController.getAllProjects);
-router.post('/',projectController.createProject);
-router.get('/contrats', projectController.getAllContrats);
+router.post('/create/projects',projectController.createProject);
+router.get('/get/contrats', projectController.getAllContrats);
 router.get('/:id/detail', projectController.getProjectDetail);
 router.get('/:id/taches', projectController.getProjectTasks);
-router.post('/:id/suivi', projectController.addSuivi);
+router.post('/create/suivis',upload.single("file"),  projectController.addSuivi);
 router.get('/stats', dashboardController.getStats);
 router.get('/ressource/getall', resourceController.getAllResources);
 router.post('/', resourceController.addResource);
 router.put('/:id', resourceController.updateResource);
 router.delete('/:id', resourceController.deleteResource);
 //Nante
-router.post("/", upload.single("photo"), suiviController.createSuivi);
+router.post("/", upload.single("file"), suiviController.createSuivi);
 router.get("/suivis", suiviController.getSuivis);
 router.get("/id/:id", suiviController.getSuiviById);
-router.put("/:id", upload.single("photo"), suiviController.updateSuivi);
+router.put("/:id", upload.single("file"), suiviController.updateSuivi);
 router.delete("/:id", suiviController.deleteSuivi);
+router.post("/contrat/create", contratController.createContrat);
+router.get("/", contratController.getContrats);
+router.get("/:id", contratController.getContratById);
+router.put("/:id", contratController.updateContrat);
+router.delete("/:id", contratController.deleteContrat);
+
+
 
 // Routes pour le Chat
 router.get("/chat/discussions", auth, getDiscussions);

@@ -57,5 +57,40 @@ const findUserByGoogleId = (connection, googleId) => {
         );
     });
 };
+const updateUser = (connection, id, data) => {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            "UPDATE user SET ? WHERE id = ?", [data, id],
+            (err, res) => {
+                if (err) return reject(err);
+                resolve(res);
+            }
+        );
+    });
+};
 
-module.exports = { createUser, findUser, findUserByGoogleId, findUserByContact,createGoogleUser };
+const deleteUser = (connection, id) => {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            "DELETE FROM user WHERE id = ?", [id],
+            (err, res) => {
+                if (err) return reject(err);
+                resolve(res);
+            }
+        );
+    });
+};
+
+const findUserById = (connection, id) => {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            "SELECT id_user, nom_user, contact, role, provider FROM user WHERE user_id = ?", [id],
+            (err, res) => {
+                if (err) return reject(err);
+                resolve(res[0]);
+            }
+        );
+    });
+};
+
+module.exports = { findUserById, createUser, findUser, findUserByGoogleId, findUserByContact,createGoogleUser,updateUser,deleteUser };

@@ -1,10 +1,12 @@
 const {
     registerUser,
     login,
-    googleLogin
+    googleLogin,
+    editUser,
+    removeUser,getProfile
 } = require("../services/user.service");
-
 const generateToken = require("../utils/generateToken");
+
 const register = (req, res) => {
     req.getConnection(async (err, connection) => {
         if (err) return res.status(500).json(err);
@@ -38,19 +40,72 @@ const loginUser = (req, res) => {
 };
 
 const googleAuth = async (req, res) => {
-  req.getConnection(async (err, connection) => {
-    if (err) {
-        return res.redirect("http://localhost:5173/login?error=google");
-    }
-    try {
-        const user = await googleLogin(connection, req.user);
-        console.log("User:", user);
-        const token = generateToken(user);
-        return res.redirect(`http://localhost:5173/user`);
-    } catch (error) {
-        return res.redirect("http://localhost:5173/login?error=google");
-    }
-});
+    req.getConnection(async (err, connection) => {
+        if (err) return res.redirect("http://localhost:5173/login?error=google");
+        try {
+            const user = await googleLogin(connection, req.user);
+            const token = generateToken(user);
+            return res.redirect(`http://localhost:5173/user?token=${token}`);
+        } catch (error) {
+            return res.redirect("http://localhost:5173/login?error=google");
+        }
+    });
 };
 
-module.exports = {register,loginUser,googleAuth};
+const updateUser = (req, res) => {
+    const id = parseInt(req.params.id);
+    req.getConnection(async (err, connection) => {
+        if (err) return res.status(500).json({ message: "Erreur de connexion" });
+        try {
+            await editUser(
+                connection,
+                id,
+                req.body,
+                req.user.id_user,
+                req.user.role
+            );
+            res.json({ message: "Compte mis à jour avec succès" });
+        } catch (error) {
+            const status =
+                error.message === "Accès refusé" ? 403 :
+                error.message === "Ancien mot de passe incorrect" ? 401 :
+                error.message === "Aucune donnée à mettre à jour" ? 400 : 500;
+            res.status(status).json({ message: error.message });
+        }
+    });
+};
+
+const deleteUser = (req, res) => {
+    const id = parseInt(req.params.id);
+    req.getConnection(async (err, connection) => {
+        if (err) return res.status(500).json({ message: "Erreur de connexion" });
+        try {
+            const result = await removeUser(
+                connection,
+                id,
+                req.user.id_user,
+                req.user.role
+            );
+            res.json(result);
+        } catch (error) {
+            const status =
+                error.message === "Accès refusé" ? 403 :
+                error.message === "Utilisateur introuvable" ? 404 : 500;
+            res.status(status).json({ message: error.message });
+        }
+    });
+};
+const getMe = (req, res) => {
+    req.getConnection(async (err, connection) => {
+        if (err) return res.status(500).json({ message: "Erreur de connexion" });
+        try {
+            const user = await getProfile(connection, req.user.id_user);
+            res.json({ user });
+        } catch (error) {
+            const status = error.message === "Utilisateur introuvable" ? 404 : 500;
+            res.status(status).json({ message: error.message });
+        }
+    });
+};
+
+module.exports = {getMe, register, loginUser, googleAuth, updateUser, deleteUser };

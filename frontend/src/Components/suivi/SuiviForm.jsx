@@ -29,7 +29,7 @@ export default function SuiviForm() {
       data.append("commentaire", formData.commentaire);
       if (formData.photo) data.append("photo", formData.photo);
 
-      await api.post("/suivis", data, {
+      await api.post("/create/suivis", data, {
         headers: { "Content-Type": "multipart/form-data" }
       });
 

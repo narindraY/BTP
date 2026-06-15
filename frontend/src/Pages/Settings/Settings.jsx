@@ -1,6 +1,8 @@
+import Profil from "./Profil";
+
 function Settings() {
     return (  <div>
-        <p>Mbola eo andalam_panamboarana azy ny zanak'olombelona leka </p>
+        <Profil/>
     </div>);
 }
 
