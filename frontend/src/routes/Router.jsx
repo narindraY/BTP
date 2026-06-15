@@ -29,6 +29,7 @@ import Rapports from "../Pages/Rapports/Rapports";
 import Suivi from "../Pages/Suivi/Suivi";
 import AddSuiviPage from "../Pages/Suivi/AddSuiviPage";
 import Chat from "../Pages/Chat/Chat";
+import Settings from "../Pages/Settings/Settings";
 
 function Router() {
     const location = useLocation();
@@ -52,6 +53,7 @@ function Router() {
              <Route path="/suivi/*"        element={<Suivi/>} />
              <Route path="/suivis/add" element={<AddSuiviPage/>} ></Route>
              <Route path="/chat" element={<Chat/>} ></Route>
+             <Route path="/parametres" element={<Settings/>} > </Route>
             {/** 
              * 
              */}
@@ -59,8 +61,9 @@ function Router() {
             </Route>
           
         <Route element={<LayoutUser/>}>
-
-            <Route path="/user" element={<Test/>} ></Route>        
+         <Route path="/chat/user" element={<Chat/>} ></Route>
+            <Route path="/user" element={<Test/>} ></Route>
+            <Route path="/setting/user" element={<Settings/>} ></Route>        
         </Route>
         </Routes>
           
@@ -71,6 +74,7 @@ function Router() {
             <Route path="/user/publication" element={<List/>} > </Route>
             <Route path="/about" element={<About/>} ></Route>
             <Route path="/contact" element={<Contact/>} ></Route>
+           
             </Route>
            
             </Routes>

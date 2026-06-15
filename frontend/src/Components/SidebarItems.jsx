@@ -60,6 +60,15 @@ export const ItemesUsers = [
         path:"/user",
         title:"kkk",
         icon:FaClock,
-    
-    }
+    },
+    {
+        path:"/setting/user",
+        title:"Parametres",
+        icon:FiSettings
+    },
+      {
+        path:"/chat/user",
+        title: "Message",
+        icon: MdMessage
+    },
 ];
