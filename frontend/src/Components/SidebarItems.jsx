@@ -82,7 +82,7 @@ export const ItemesUsers = [
         icon:FiFileText,
     },
     {
-        path:"/logout",
+        path:"/logout/user",
         title:"Deconnexion",
         icon: MdLogout
     }

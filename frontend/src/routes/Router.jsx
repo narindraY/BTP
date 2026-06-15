@@ -67,7 +67,8 @@ function Router() {
          <Route path="/chat/user" element={<Chat/>} ></Route>
             <Route path="/user" element={<Test/>} ></Route>
             <Route path="/setting/user" element={<Settings/>} ></Route>
-            <Route path="/pub/user"  element={<ListForUser/>} > </Route>        
+            <Route path="/pub/user"  element={<ListForUser/>} > </Route>
+             <Route path="/logout/user" element={<Logout/>} ></Route>        
         </Route>
         </Routes>
           
