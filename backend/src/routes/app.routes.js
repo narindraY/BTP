@@ -4,6 +4,7 @@ const router = express.Router();
 const passport = require("../config/passport")
 
 const { register, loginUser, googleAuth, deleteUser, updateUser, getMe } = require("../controllers/user.controller");
+//router.get("/me", getMe)
 const { validateRegister } = require("../validation/user.validation");
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
@@ -51,7 +52,7 @@ router.post("/publication/create", upload.single("img"), createPub);
 router.get("/publication/list", listPub);
 router.delete("/delete/user", deleteUser);
 router.put("/update/user/:id", updateUser)
-router.get("/me", getMe)
+router.get("/me", auth, getMe)
 
 //Narindra
 router.get('/projects',projectController.getAllProjects);

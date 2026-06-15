@@ -84,7 +84,7 @@ const deleteUser = (connection, id) => {
 const findUserById = (connection, id) => {
     return new Promise((resolve, reject) => {
         connection.query(
-            "SELECT id_user, nom_user, contact, role, provider FROM user WHERE user_id = ?", [id],
+            "SELECT id_user, nom_user, contact, role, provider FROM user WHERE id_user = ?", [id],
             (err, res) => {
                 if (err) return reject(err);
                 resolve(res[0]);
