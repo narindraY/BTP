@@ -1,6 +1,6 @@
 import { FaCheck, FaClock, FaHome } from "react-icons/fa";
 import{ FiBook, FiDollarSign, FiFileText, FiHome, FiSettings} from "react-icons/fi"
-import { MdAddCircleOutline, MdMessage, MdPerson } from "react-icons/md";
+import { MdAddCircleOutline, MdLogout, MdMessage, MdPerson } from "react-icons/md";
 export const SidebarItems = [
     {
         path:"/dashboard",
@@ -51,6 +51,11 @@ export const SidebarItems = [
         path:"/parametres",
         title:"Parametres",
         icon:FiSettings
+    },
+      {
+        path:"/logout",
+        title:"Deconnexion",
+        icon: MdLogout
     }
 ];
 
@@ -76,4 +81,9 @@ export const ItemesUsers = [
         title:"Actualites",
         icon:FiFileText,
     },
+    {
+        path:"/logout",
+        title:"Deconnexion",
+        icon: MdLogout
+    }
 ];
