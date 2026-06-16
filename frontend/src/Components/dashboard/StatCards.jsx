@@ -2,69 +2,90 @@ import { FiFileText, FiHome, FiDollarSign, FiTrendingUp } from "react-icons/fi";
 
 const CARDS = [
   {
-    key: "totalContrats",
-    label: "Contrats",
-    sub: "contrats actifs",
-    icon: <FiFileText size={15} />,
-    accent: "#2563EB",
-    bg: "#EFF4FF",
+    key:    "totalContrats",
+    label:  "Contrats",
+    sub:    "contrats actifs",
+    icon:   <FiFileText size={15} />,
     format: v => v,
   },
   {
-    key: "projetsActifs",
-    label: "Projets en cours",
-    sub: "en cours d'exécution",
-    icon: <FiHome size={15} />,
-    accent: "#16A34A",
-    bg: "#F0FDF4",
+    key:    "projetsActifs",
+    label:  "Projets en cours",
+    sub:    "en cours d'exécution",
+    icon:   <FiHome size={15} />,
     format: v => v,
   },
   {
-    key: "budgetTotal",
-    label: "Budget total (FCFA)",
-    sub: "budget alloué",
-    icon: <FiDollarSign size={15} />,
-    accent: "#D97706",
-    bg: "#FFFBEB",
+    key:    "budgetTotal",
+    label:  "Budget total (FCFA)",
+    sub:    "budget alloué",
+    icon:   <FiDollarSign size={15} />,
     format: v => Number(v).toLocaleString("fr-FR"),
   },
   {
-    key: "avancementMoyen",
-    label: "Avancement moyen",
-    sub: "progression globale",
-    icon: <FiTrendingUp size={15} />,
-    accent: "#7C3AED",
-    bg: "#F5F3FF",
+    key:    "avancementMoyen",
+    label:  "Avancement moyen",
+    sub:    "progression globale",
+    icon:   <FiTrendingUp size={15} />,
     format: v => `${Math.round(Number(v) || 0)} %`,
   },
 ];
 
-const StatCard = ({ label, sub, icon, accent,  format, value }) => (
-  <div className="relative shadow-md bg-white border border-gray-100 rounded-lg p-5 flex flex-col gap-3 overflow-hidden">
-    <div className="absolute top-0 left-0 right-0 h-0.5 bg-[var(--secondary)] "/>
-    <div className="flex items-center">
-      <div className="">{icon}</div>
-      <span className="text-[11px] ml-2 font-bold uppercase tracking-widest text-[var(--primary)] ">
-        {label}
-      </span>
-    </div>
+const StatCard = ({ label, sub, icon, format, value, index }) => {
+  /* rotate accent between secondary and hoover */
+  const accentVar  = index % 2 === 0 ? "var(--secondary)" : "var(--hoover)";
+  const accentBg   = index % 2 === 0
+    ? "rgba(12,122,196,0.08)"
+    : "rgba(70,231,137,0.12)";
 
-    <div>
+  return (
+    <div
+      className="relative flex flex-col gap-3 rounded-xl p-5 overflow-hidden"
+      style={{
+        background:  "var(--bg)",
+        border:      "0.5px solid rgba(6,11,39,0.10)",
+        boxShadow:   "0 1px 6px rgba(6,11,39,0.06)",
+      }}
+    >
       <div
-        className="font-mono font-medium leading-none"
-        style={{ fontSize: 22, color: accent }}
-      >
-        {format(value ?? 0)}
+        className="absolute top-0 left-0 right-0"
+        style={{ height: 3, background: accentVar }}
+      />
+
+      <div className="flex items-center gap-2 pt-1">
+        <div
+          className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
+          style={{ background: accentBg, color: accentVar }}
+        >
+          {icon}
+        </div>
+        <span
+          className="text-[11px] font-bold uppercase tracking-widest"
+          style={{ color: "var(--primary)" }}
+        >
+          {label}
+        </span>
       </div>
-      <div className="text-[11px] text-gray-400 mt-1">{sub}</div>
+
+      <div>
+        <div
+          className="font-mono font-semibold leading-none"
+          style={{ fontSize: 22, color: accentVar }}
+        >
+          {format(value ?? 0)}
+        </div>
+        <div className="text-[11px] mt-1" style={{ color: "rgba(6,11,39,0.38)" }}>
+          {sub}
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const StatCards = ({ stats = {} }) => (
   <div className="grid grid-cols-4 gap-3">
-    {CARDS.map(card => (
-      <StatCard key={card.key} {...card} value={stats[card.key]} />
+    {CARDS.map((card, i) => (
+      <StatCard key={card.key} {...card} value={stats[card.key]} index={i} />
     ))}
   </div>
 );
