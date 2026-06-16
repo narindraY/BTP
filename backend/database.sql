@@ -115,7 +115,9 @@ CREATE TABLE ressource (
     type_ressource VARCHAR(50) NOT NULL,
     quantite DECIMAL,
     unite VARCHAR(50),
-    prix_unitaire DECIMAL(15,2)
+    prix_unitaire DECIMAL(15,2),
+    projet_id INT,
+    FOREIGN KEY (projet_id) REFERENCES projet(id_projet)
 );
 CREATE TABLE tache_ressource (
     id INT AUTO_INCREMENT PRIMARY KEY,

@@ -1,4 +1,4 @@
-const db = require("../config/db.narindra")
+const { pool: db } = require("../config/db")
 const PDFDocument = require("pdfkit");
 
 
@@ -16,15 +16,16 @@ exports.generateRapportJournalier = async (req, res) => {
   doc.moveDown();
 
   const sql = `
-    SELECT p.nom_projet, t.nom_tache, s.avancement, s.commentaire, s.photo, s.created_at
-    FROM SUIVI s
-    INNER JOIN TACHE t ON s.tache_id = t.id_tache
-    INNER JOIN PROJET p ON t.projet_id = p.id_projet
-    ORDER BY s.created_at DESC
+    SELECT p.nom_projet, t.titre AS nom_tache, s.pourcentage AS avancement, s.commentaire, s.date_creation AS created_at
+    FROM suivi s
+    INNER JOIN tache t ON s.tache_id = t.id_tache
+    INNER JOIN projet p ON t.projet_id = p.id_projet
+    WHERE DATE(s.date_creation) = ?
+    ORDER BY s.date_creation DESC
   `;
 
   try {
-    const [rows] = await db.query(sql);
+    const [rows] = await db.query(sql, [date]);
 
     let y = 150;
 
@@ -60,12 +61,12 @@ exports.generateRapportJournalier = async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    res.status(500).send(err);
+    doc.end();
   }
 };
 
 
-exports.generateRapportMensuel = (req, res) => {
+exports.generateRapportMensuel = async (req, res) => {
   const { month, year } = req.query;
   const doc = new PDFDocument();
 
@@ -77,37 +78,38 @@ exports.generateRapportMensuel = (req, res) => {
   doc.moveDown();
 
   const sql = `
-    SELECT 
+    SELECT
       COUNT(DISTINCT c.id_contrat) AS nb_contrats,
       COUNT(DISTINCT p.id_projet) AS nb_projets,
       COUNT(DISTINCT t.id_tache) AS nb_taches_terminees,
-      AVG(s.avancement) AS moyenne_avancement,
+      AVG(s.pourcentage) AS moyenne_avancement,
       SUM(r.prix_unitaire * tr.quantite_utilisee) AS depenses_mois
-    FROM CONTRAT c
-    LEFT JOIN PROJET p ON p.contrat_id = c.id_contrat
-    LEFT JOIN TACHE t ON t.projet_id = p.id_projet
-    LEFT JOIN SUIVI s ON s.tache_id = t.id_tache
-    LEFT JOIN TACHE_RESSOURCE tr ON tr.tache_id = t.id_tache
-    LEFT JOIN RESSOURCE r ON r.id_ressource = tr.ressource_id
-    WHERE MONTH(s.created_at) = ? AND YEAR(s.created_at) = ?;
+    FROM contrat c
+    LEFT JOIN projet p ON p.contrat_id = c.id_contrat
+    LEFT JOIN tache t ON t.projet_id = p.id_projet
+    LEFT JOIN suivi s ON s.tache_id = t.id_tache
+    LEFT JOIN tache_ressource tr ON tr.tache_id = t.id_tache
+    LEFT JOIN ressource r ON r.id_ressource = tr.ressource_id
+    WHERE MONTH(s.date_creation) = ? AND YEAR(s.date_creation) = ?;
   `;
 
-  db.query(sql, [month, year], (err, rows) => {
-    if (err) return res.status(500).send(err);
-
+  try {
+    const [rows] = await db.query(sql, [month, year]);
     const stats = rows[0];
     doc.fontSize(12).text(`Nombre de contrats: ${stats.nb_contrats}`);
     doc.fontSize(12).text(`Nombre de projets: ${stats.nb_projets}`);
     doc.fontSize(12).text(`Nombre de tâches terminées: ${stats.nb_taches_terminees}`);
     doc.fontSize(12).text(`Moyenne d'avancement: ${stats.moyenne_avancement || 0}%`);
     doc.fontSize(12).text(`Dépenses du mois: ${stats.depenses_mois || 0} FCFA`);
-
     doc.end();
-  });
+  } catch (err) {
+    console.log(err);
+    doc.end();
+  }
 };
 
 
-exports.generateRapportFinancier = (req, res) => {
+exports.generateRapportFinancier = async (req, res) => {
   const doc = new PDFDocument();
 
   res.setHeader("Content-Type", "application/pdf");
@@ -118,30 +120,30 @@ exports.generateRapportFinancier = (req, res) => {
   doc.moveDown();
 
   const sql = `
-    SELECT 
+    SELECT
       c.id_contrat,
-      c.type_contrat,
       c.budget,
       SUM(r.prix_unitaire * tr.quantite_utilisee) AS depenses,
-      (c.budget - SUM(r.prix_unitaire * tr.quantite_utilisee)) AS reste_budget
-    FROM CONTRAT c
-    LEFT JOIN PROJET p ON p.contrat_id = c.id_contrat
-    LEFT JOIN TACHE t ON t.projet_id = p.id_projet
-    LEFT JOIN TACHE_RESSOURCE tr ON tr.tache_id = t.id_tache
-    LEFT JOIN RESSOURCE r ON r.id_ressource = tr.ressource_id
-    GROUP BY c.id_contrat, c.type_contrat, c.budget;
+      (c.budget - COALESCE(SUM(r.prix_unitaire * tr.quantite_utilisee), 0)) AS reste_budget
+    FROM contrat c
+    LEFT JOIN projet p ON p.contrat_id = c.id_contrat
+    LEFT JOIN tache t ON t.projet_id = p.id_projet
+    LEFT JOIN tache_ressource tr ON tr.tache_id = t.id_tache
+    LEFT JOIN ressource r ON r.id_ressource = tr.ressource_id
+    GROUP BY c.id_contrat, c.budget;
   `;
 
-  db.query(sql, (err, rows) => {
-    if (err) return res.status(500).send(err);
-
+  try {
+    const [rows] = await db.query(sql);
     rows.forEach((c) => {
       doc.fontSize(12).text(
-        `Contrat ID: ${c.id_contrat} | Type: ${c.type_contrat} | Budget: ${c.budget} | Dépenses: ${c.depenses || 0} | Reste: ${c.reste_budget || c.budget}`
+        `Contrat ID: ${c.id_contrat} | Budget: ${c.budget} | Dépenses: ${c.depenses || 0} | Reste: ${c.reste_budget || c.budget}`
       );
       doc.moveDown();
     });
-
     doc.end();
-  });
+  } catch (err) {
+    console.log(err);
+    doc.end();
+  }
 };
