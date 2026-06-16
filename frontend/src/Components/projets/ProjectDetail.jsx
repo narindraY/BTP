@@ -49,7 +49,6 @@ const SuiviModal = ({ taches, projetId, onClose, onSaved }) => {
           overflow:      "hidden",
         }}
       >
-
         <div
           className="flex items-center justify-between px-6 py-4 shrink-0"
           style={{ borderBottom: "0.5px solid rgba(6,11,39,0.08)" }}
@@ -245,6 +244,7 @@ const ProjectDetail = ({ project, onBack }) => {
 
           {activeTab === "Résumé" && (
             <div className="flex flex-col gap-5">
+
               <div>
                 <p className="text-[12px] font-semibold mb-2" style={{ color: "rgba(6,11,39,0.5)" }}>Avancement global</p>
                 <div className="flex items-center gap-3">
@@ -266,14 +266,13 @@ const ProjectDetail = ({ project, onBack }) => {
                 <div className="flex flex-col">
                   {taches.map((t, i) => (
                     <div key={t.id_tache} className="flex gap-3" style={{ paddingBottom: i < taches.length - 1 ? 18 : 0 }}>
-  
+
                       <div className="flex flex-col items-center">
                         <div className="rounded-full shrink-0 mt-1" style={{ width: 10, height: 10, background: "var(--secondary)", border: "2px solid rgba(12,122,196,0.25)" }} />
                         {i < taches.length - 1 && (
                           <div className="flex-1 mt-1" style={{ width: 2, background: "rgba(6,11,39,0.08)" }} />
                         )}
                       </div>
-  
                       <div className="flex-1">
                         <div className="flex justify-between items-start gap-2">
                           <div>

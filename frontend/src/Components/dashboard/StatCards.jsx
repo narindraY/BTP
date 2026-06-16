@@ -32,7 +32,6 @@ const CARDS = [
 ];
 
 const StatCard = ({ label, sub, icon, format, value, index }) => {
-  /* rotate accent between secondary and hoover */
   const accentVar  = index % 2 === 0 ? "var(--secondary)" : "var(--hoover)";
   const accentBg   = index % 2 === 0
     ? "rgba(12,122,196,0.08)"
