@@ -1,3 +1,4 @@
+import { FaBuilding } from "react-icons/fa";
 import { FiArrowRight, FiCalendar, FiDollarSign } from "react-icons/fi";
 
 const STATUS_CFG = {
@@ -34,22 +35,14 @@ const ProjectCard = ({ project, onClick }) => {
   const barColor  = done ? "var(--hoover)" : "var(--secondary)";
 
   return (
-    <div
-      onClick={onClick}
-      className="flex flex-col rounded-xl overflow-hidden cursor-pointer transition-shadow duration-150 hover:shadow-md"
-      style={{
-        background:  "var(--bg)",
-        border:      "0.5px solid rgba(6,11,39,0.10)",
-        boxShadow:   "0 1px 4px rgba(6,11,39,0.06)",
-      }}
-    >
+    <div onClick={onClick} className="flex flex-col rounded-xl overflow-hidden cursor-pointer transition-shadow duration-150 hover:shadow-md"
+      style={{ background:  "var(--bg)", border:      "0.5px solid rgba(6,11,39,0.10)",
+        boxShadow:   "0 1px 4px rgba(6,11,39,0.06)",}}>
       <div style={{ height: 3, background: typeColor }} />
-
       <div className="flex flex-col gap-4 p-4 flex-1">
-
         <div className="flex items-start justify-between gap-2">
           <h6 className="text-[15px] font-semibold leading-snug m-0" style={{ color: "var(--primary)" }}>
-            {nom_projet}
+             <div className="flex gap-1 items-center"><FaBuilding/> {nom_projet}</div>
           </h6>
           <span
             className="shrink-0 text-[11px] font-semibold px-2.5 py-0.5 rounded-full"

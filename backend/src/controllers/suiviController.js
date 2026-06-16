@@ -2,16 +2,14 @@ const db = require("../config/db.nante");
 
 // ➕ Créer un suivi
 exports.createSuivi = (req, res) => {
-  const { tache_id, avancement, commentaire } = req.body;
+  const { avancement, commentaire } = req.body;
   const photo = req.file ? `/uploads/${req.file.filename}` : null;
-
-  if (!tache_id || avancement === undefined) {
+  if (avancement === undefined) {
     return res.status(400).json({ message: "Champs obligatoires manquants ❌" });
   }
-
   db.query(
-    "INSERT INTO SUIVI (tache_id, avancement, commentaire, photo) VALUES (?, ?, ?, ?)",
-    [tache_id, avancement, commentaire, photo],
+    "INSERT INTO SUIVI (avancement, commentaire, photo) VALUES (?, ?, ?)",
+    [avancement, commentaire, photo],
     (err, result) => {
       if (err) {
         console.error("Erreur SQL:", err);
@@ -45,7 +43,6 @@ exports.updateSuivi = (req, res) => {
   const { id } = req.params;
   const { avancement, commentaire } = req.body;
   const photo = req.file ? `/uploads/${req.file.filename}` : req.body.photo;
-
   db.query(
     "UPDATE SUIVI SET avancement=?, commentaire=?, photo=? WHERE id_suivi=?",
     [avancement, commentaire, photo, id],

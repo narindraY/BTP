@@ -60,14 +60,14 @@ router.post('/create/projects',projectController.createProject);
 router.get('/get/contrats', projectController.getAllContrats);
 router.get('/:id/detail', projectController.getProjectDetail);
 router.get('/:id/taches', projectController.getProjectTasks);
-router.post('/create/suivis',upload.single("file"),  projectController.addSuivi);
+//router.post('/create/suivis',upload.single("file"),  projectController.addSuivi);
 router.get('/stats', dashboardController.getStats);
 router.get('/ressource/getall', resourceController.getAllResources);
 router.post('/ressource/create', resourceController.addResource);
 router.put('/:id', resourceController.updateResource);
 router.delete('/:id', resourceController.deleteResource);
 //Nante
-router.post("/", upload.single("file"), suiviController.createSuivi);
+router.post("/create/suivis", upload.single("file"), suiviController.createSuivi);
 router.get("/suivis", suiviController.getSuivis);
 router.get("/id/:id", suiviController.getSuiviById);
 router.put("/:id", upload.single("file"), suiviController.updateSuivi);

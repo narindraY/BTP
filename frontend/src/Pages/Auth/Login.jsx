@@ -30,7 +30,7 @@ function Login({ onSwitchToRegister }) {
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("role", res.data.user.role);
             if (role === "admin") {
-                navigate("/publication/list");
+                navigate("/dashboard");
             } else {
                 navigate("/user");
             }

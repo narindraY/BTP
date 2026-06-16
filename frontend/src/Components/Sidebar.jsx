@@ -22,7 +22,7 @@ function Sidebar() {
   };
 
   return (
-    <aside className="w-50 h-screen bg-gray-800 text-white">
+    <aside className="w-16 sm:w-50 h-screen bg-gray-800 text-white">
       <Dialog
         isOpen={openLogout}
         title="Déconnexion"
@@ -33,8 +33,6 @@ function Sidebar() {
       <ul className="p-4">
         {SidebarItems.map((item) => {
           const Icon = item.icon;
-
-          // Cas spécial pour logout
           if (item.path === "/logout") {
             return (
               <li key={item.path} className="mt-4">
@@ -42,7 +40,7 @@ function Sidebar() {
                   onClick={() => setOpenLogout(true)}
                   className="flex items-center gap-3 rounded-lg hover:bg-[var(--hoover)] hover:text-[var(--secondary)] w-full h-8"
                 >
-                  <Icon size={20} /> <span>{item.title}</span>
+                  <Icon size={20}  /> <span className="hidden sm:inline">{item.title}</span>
                 </button>
               </li>
             );
@@ -53,8 +51,9 @@ function Sidebar() {
               <NavLink
                 to={item.path}
                 className="flex items-center gap-3 rounded-lg hover:bg-[var(--hoover)] hover:text-[var(--secondary)] w-full h-8"
-              >
-                <Icon size={20} /> <span>{item.title}</span>
+                >
+                <Icon size={20} /> <span className="hidden sm:inline">
+                  {item.title}</span>
               </NavLink>
             </li>
           );

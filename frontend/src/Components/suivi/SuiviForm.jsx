@@ -43,10 +43,21 @@ export default function SuiviForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input type="number" name="tache_id" placeholder="ID tâche" value={formData.tache_id} onChange={handleChange} required />
-      <input type="number" name="avancement" placeholder="Avancement %" value={formData.avancement} onChange={handleChange} required />
+    <div className="flex-row gap-2 items-center">
+      <div className="flex items-center gap-10 " >
+        <label htmlFor="avancement" > Avancement</label>
+      <input type="number" name="avancement" placeholder="Avancement %" value={formData.avancement} onChange={handleChange} required
+      className="w-70 rounded px-4 py-3" />
+      </div>
+      <div className="flex items-center">
+        <label htmlFor="commentaire">Commentaire</label>
       <textarea name="commentaire" placeholder="Commentaire" value={formData.commentaire} onChange={handleChange} />
+      </div>
+      <div className="flex items-center">
+        <label htmlFor="file">Photo</label>
       <input type="file" name="photo" accept="image/*" onChange={handleChange} />
+      </div>
+    </div>
       <button type="submit">Enregistrer</button>
     </form>
   );

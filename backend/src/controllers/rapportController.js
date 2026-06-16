@@ -1,4 +1,4 @@
-const db = require("../config/db.narindra")
+const db = require("../config/db.nante")
 const PDFDocument = require("pdfkit");
 
 
