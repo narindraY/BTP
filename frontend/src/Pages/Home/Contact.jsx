@@ -16,7 +16,7 @@ function Contact() {
         setLoading(true);
         setError("");
         try {
-            await axios.post(`${base_url}/contact/send`, form, {
+            await axios.post(`${base_url}/send/contact`, form, {
                 headers: { "Content-Type": "application/json" }
             });
             setSent(true);

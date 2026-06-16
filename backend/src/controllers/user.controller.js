@@ -99,8 +99,9 @@ const getMe = (req, res) => {
     req.getConnection(async (err, connection) => {
         if (err) return res.status(500).json({ message: "Erreur de connexion" });
         try {
-            const user = await getProfile(connection, req.user.id_user);
+            const user = await getProfile(connection, req.user.id);
             res.json({ user });
+            console.log(req.user);
         } catch (error) {
             const status = error.message === "Utilisateur introuvable" ? 404 : 500;
             res.status(status).json({ message: error.message });

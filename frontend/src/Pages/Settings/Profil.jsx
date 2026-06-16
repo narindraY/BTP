@@ -17,8 +17,10 @@ function Profil() {
                     }
                 });
                 setData(res.data.user);
+                console.log("okey", res.data.user)
             } catch (err) {
                 setError(err.response?.data?.message || "Erreur lors du chargement");
+                console.log("error",err)
             } finally {
                 setLoading(false);
             }

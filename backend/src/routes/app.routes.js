@@ -4,6 +4,7 @@ const router = express.Router();
 const passport = require("../config/passport")
 
 const { register, loginUser, googleAuth, deleteUser, updateUser, getMe } = require("../controllers/user.controller");
+//router.get("/me", getMe)
 const { validateRegister } = require("../validation/user.validation");
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
@@ -21,7 +22,10 @@ const resourceController = require('../controllers/resourceController');
 const suiviController = require("../controllers/suiviController");
 const contratController = require("../controllers/contratController");
 const rapportController = require("../controllers/rapportController");
-
+const {sendContact} = require("../controllers/contact.controller")
+//router.post("/send/contact", sendContact);
+const { logout } = require("../controllers/auth.controller");
+//router.post("/logout", logout);
 const upload = require("../config/multer");
 
 router.get(
@@ -48,7 +52,7 @@ router.post("/publication/create", upload.single("img"), createPub);
 router.get("/publication/list", listPub);
 router.delete("/delete/user", deleteUser);
 router.put("/update/user/:id", updateUser)
-router.get("/me", getMe)
+router.get("/me", auth, getMe)
 
 //Narindra
 router.get('/projects',projectController.getAllProjects);
@@ -95,5 +99,11 @@ router.get("/finance/spend", getSpendProject);
 router.get("/finance/balance", getBalaceProject);
 
 router.get("/admin", admin);
+router.post("/send/contact", sendContact);
+
+router.post("/logout", logout);
+
+module.exports = router;
+
 
 module.exports = router;
