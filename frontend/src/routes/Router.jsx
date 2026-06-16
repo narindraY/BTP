@@ -19,6 +19,7 @@ import LayoutUser from "../Components/LayoutUser";
 import Dashboard from "../Pages/Dashboard/Dashboard";
 import Contrats from "../Pages/Contrats/Contrats";
 //Narindra - Nate
+import MonProjet from '../Pages/Projets/MonProjet';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
     
@@ -68,7 +69,8 @@ function Router() {
             <Route path="/user" element={<Test/>} ></Route>
             <Route path="/setting/user" element={<Settings/>} ></Route>
             <Route path="/pub/user"  element={<ListForUser/>} > </Route>
-             <Route path="/logout/user" element={<Logout/>} ></Route>        
+             <Route path="/logout/user" element={<Logout/>} ></Route>    
+             <Route path="/mes-projets" element={<MonProjet />} />    
         </Route>
         </Routes>
           

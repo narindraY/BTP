@@ -205,3 +205,31 @@ exports.addSuivi = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// ito le projetUser
+
+exports.getMyProjects = async (req, res) => {
+  try {
+    const userId = req.user.id_user;
+
+    const sql = `
+      SELECT 
+        p.*,
+        c.budget      AS budget_alloue,
+        c.date_debut  AS contrat_debut,
+        c.date_fin    AS contrat_fin,
+        AVG(s.avancement) AS avancement_moyen
+      FROM PROJET p
+      JOIN CONTRAT c ON p.contrat_id = c.id_contrat
+      LEFT JOIN TACHE t ON t.projet_id = p.id_projet
+      LEFT JOIN SUIVI s ON s.tache_id = t.id_tache
+      WHERE c.user_id = ?
+      GROUP BY p.id_projet, c.budget, c.date_debut, c.date_fin
+    `;
+
+    const [projets] = await db.query(sql, [userId]);
+    res.status(200).json(projets);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

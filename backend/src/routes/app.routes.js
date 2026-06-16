@@ -57,6 +57,9 @@ router.get("/me", auth, getMe)
 //Narindra
 router.get('/projects',projectController.getAllProjects);
 router.post('/create/projects',projectController.createProject);
+//iooo eee
+router.get('/my-projects', authMiddleware, projectController.getMyProjects);
+// 
 router.get('/get/contrats', projectController.getAllContrats);
 router.get('/:id/detail', projectController.getProjectDetail);
 router.get('/:id/taches', projectController.getProjectTasks);
