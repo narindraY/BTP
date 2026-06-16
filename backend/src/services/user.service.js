@@ -1,10 +1,13 @@
 const bcrypt = require('bcrypt');
-const {createUser,findUser,findUserByContact,findUserByGoogleId,findUserByEmail,createGoogleUser} = require("../models/user.models");
-
+const {
+    createUser, findUser, findUserByContact,
+    findUserByGoogleId, createGoogleUser,
+    updateUser, deleteUser, findUserById
+} = require("../models/user.models");
 const generateToken = require("../utils/generateToken");
+
 const registerUser = async (connection, data) => {
     const hash = await bcrypt.hash(data.password, 10);
-
     const userData = {
         nom: data.nom,
         email: data.email,
@@ -13,20 +16,16 @@ const registerUser = async (connection, data) => {
         role: "user",
         actif: true
     };
-
     return await createUser(connection, userData);
 };
 
 const login = async (connection, contact, password) => {
     const user = await findUser(connection, contact);
-    if (!user) {
-        throw new Error("user not found");
-    }
-    const match = await bcrypt.compare(password, user.mot_de_passe);
+    if (!user) throw new Error("user not found");
 
-    if (!match) {
-        throw new Error("password incorrect");
-    }
+    const match = await bcrypt.compare(password, user.mot_de_passe);
+    if (!match) throw new Error("password incorrect");
+
     const token = generateToken(user);
     return {
         token,
@@ -41,7 +40,6 @@ const login = async (connection, contact, password) => {
 
 const googleLogin = async (connection, profile) => {
     const email = profile.emails?.[0]?.value;
-
     // Searching by email since google_id is missing in the new schema
     let user = await findUserByEmail(connection, email);
 
@@ -56,9 +54,8 @@ const googleLogin = async (connection, profile) => {
         role: "user",
         actif: true
     };
-
     await createGoogleUser(connection, userData);
     return await findUserByEmail(connection, email);
 };
 
-module.exports = {registerUser,login,googleLogin};
+module.exports = { registerUser, login, googleLogin };

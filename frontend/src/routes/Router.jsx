@@ -15,7 +15,20 @@ import About from "../Pages/Home/About";
 import Contact from "../Pages/Home/Contact";
 import bg from "../assets/bg.png"
 import LayoutUser from "../Components/LayoutUser";
+//route madio
+import Dashboard from "../Pages/Dashboard/Dashboard";
+import Contrats from "../Pages/Contrats/Contrats";
+
+import Projets from "../Pages/Projets/Projet";
+import Ressources from "../Pages/Ressources/Ressources";
+
+import Rapports from "../Pages/Rapports/Rapports";
+import Suivi from "../Pages/Suivi/Suivi";
+import AddSuiviPage from "../Pages/Suivi/AddSuiviPage";
 import Chat from "../Pages/Chat/Chat";
+import Settings from "../Pages/Settings/Settings";
+import ListForUser from "../Pages/Publication/ListForUser";
+import Logout from "../Components/logout/Logout";
 function Router() {
     const location = useLocation();
     return (  
@@ -28,12 +41,25 @@ function Router() {
             <Route path="/publication/create" element={<AddPublication/>} ></Route>
             <Route path="/publication/list" element={<ListPublication/>} ></Route>
             <Route path="/finance" element={<Budget/>} ></Route>
+            {/** route madio */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/contrats/*" element={<Contrats />} />
+            <Route path="/projets" element={<Projets/>} />
+            <Route path="/ressources" element={<Ressources />} />
+            <Route path="/rapports" element={<Rapports/>} />
+            <Route path="/suivi/*" element={<Suivi/>} />
+            <Route path="/suivis/add" element={<AddSuiviPage/>} ></Route>
             <Route path="/chat" element={<Chat/>} ></Route>
+            <Route path="/parametres" element={<Settings/>} > </Route>
+            <Route path="/logout" element={<Logout/>} ></Route>
             </Route>
           
         <Route element={<LayoutUser/>}>
-
-            <Route path="/user" element={<Test/>} ></Route>        
+         <Route path="/chat/user" element={<Chat/>} ></Route>
+            <Route path="/user" element={<Test/>} ></Route>
+            <Route path="/setting/user" element={<Settings/>} ></Route>
+            <Route path="/pub/user"  element={<ListForUser/>} > </Route>
+             <Route path="/logout/user" element={<Logout/>} ></Route>        
         </Route>
         </Routes>
           
@@ -44,6 +70,7 @@ function Router() {
             <Route path="/user/publication" element={<List/>} > </Route>
             <Route path="/about" element={<About/>} ></Route>
             <Route path="/contact" element={<Contact/>} ></Route>
+           
             </Route>
            
             </Routes>
@@ -54,3 +81,23 @@ function Router() {
 
 export default Router;
 //<Route path="/finance" element={<Budget/>} ></Route>
+
+
+
+
+
+
+
+          {/*
+            
+            <Route path="/projets"      element={<Projets />} />
+           
+            <Route path="/contrats"     element={<ComingSoon title="Contrats" />} />
+            
+            <Route path="/finance"      element={<ComingSoon title="Finance" />} />
+            
+            <Route path="/utilisateurs" element={<ComingSoon title="Utilisateurs" />} />
+            <Route path="/parametres"   element={<ComingSoon title="Paramètres" />} />
+            <Route path="*"             element={<ComingSoon title="Page non trouvée" />} />
+            */}
+        

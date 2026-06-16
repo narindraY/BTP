@@ -33,6 +33,7 @@ const getDiscussions = (req, res) => {
     req.getConnection((err, connection) => {
         if (err) return res.status(500).json({ error: "Erreur de connexion DB" });
         const sql = role === 'admin'
+        const sql = role === 'admin'
             ? "SELECT d.*, u.nom FROM discussion d JOIN utilisateur u ON d.client_id = u.id_utilisateur"
             : "SELECT d.*, u.nom FROM discussion d JOIN utilisateur u ON d.client_id = u.id_utilisateur WHERE d.client_id = ? OR d.id_discussion IN (SELECT discussion_id FROM message WHERE utilisateur_id = ?)";
         connection.query(sql, [utilisateur_id, utilisateur_id], (err, results) => {

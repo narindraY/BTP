@@ -1,5 +1,6 @@
-import { FaClock } from "react-icons/fa";
-import{FiDollarSign, FiFileText, FiHome, FiMessageSquare} from "react-icons/fi"
+import { FaCheck, FaHome } from "react-icons/fa";
+import { FiBook, FiDollarSign, FiFileText, FiHome, FiSettings } from "react-icons/fi"
+import { MdAddCircleOutline, MdLogout, MdMessage, MdPerson } from "react-icons/md";
 export const SidebarItems = [
     {
         path:"/dashboard",
@@ -7,9 +8,41 @@ export const SidebarItems = [
         icon: FiHome,
     },
     {
+    {
+        path:"/projets",
+        title:"Projets",
+        icon:FaHome,
+    },
+    {
+        path:"/contrats",
+        title:"Contrat",
+        icon:FiFileText
+    },
+    {
+        path:"/suivi",
+        title:"Suivi des travaux",
+        icon:FaCheck
+    },
+    },
+    {
+        path:"/finance",
+        title:"Finance",
+        icon: FiDollarSign,
+    },
+    {
+        path:"/ressources",
+        title:"Ressources",
+        icon:FiBook,
+    },
+    {
         path:"/chat",
-        title:"Messagerie",
-        icon: FiMessageSquare,
+        title: "Message",
+        icon: MdMessage
+    },
+    {
+        path:"/rapports",
+        title:"Rapport",
+        icon:MdAddCircleOutline,
     },
     {
         path:"/publication/list",
@@ -17,17 +50,42 @@ export const SidebarItems = [
         icon:FiFileText,
     },
     {
-        path:"/finance",
-        title:"Finance",
-        icon: FiDollarSign,
+        path:"/parametres",
+        title:"Parametres",
+        icon:FiSettings
+    },
+      {
+        path:"/logout",
+        title:"Deconnexion",
+        icon: MdLogout
     }
 ];
+
 export const ItemesUsers = [
     
     {
         path:"/user",
         title:"kkk",
         icon:FaClock,
-    
+    },
+    {
+        path:"/setting/user",
+        title:"Parametres",
+        icon:FiSettings
+    },
+      {
+        path:"/chat/user",
+        title: "Message",
+        icon: MdMessage
+    },
+      {
+        path:"/pub/user",
+        title:"Actualites",
+        icon:FiFileText,
+    },
+    {
+        path:"/logout/user",
+        title:"Deconnexion",
+        icon: MdLogout
     }
 ];
