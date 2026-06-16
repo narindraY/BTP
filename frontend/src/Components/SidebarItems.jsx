@@ -1,13 +1,12 @@
-import { FaCheck, FaHome } from "react-icons/fa";
+import { FaCheck, FaClock, FaHome } from "react-icons/fa";
 import { FiBook, FiDollarSign, FiFileText, FiHome, FiSettings } from "react-icons/fi"
-import { MdAddCircleOutline, MdLogout, MdMessage, MdPerson } from "react-icons/md";
+import { MdAddCircleOutline, MdEditNote, MdLogout, MdMessage, MdPerson } from "react-icons/md";
 export const SidebarItems = [
     {
         path:"/dashboard",
         title:"Tableau de bord",
         icon: FiHome,
     },
-    {
     {
         path:"/projets",
         title:"Projets",
@@ -22,7 +21,6 @@ export const SidebarItems = [
         path:"/suivi",
         title:"Suivi des travaux",
         icon:FaCheck
-    },
     },
     {
         path:"/finance",
@@ -62,26 +60,30 @@ export const SidebarItems = [
 ];
 
 export const ItemesUsers = [
-    
     {
         path:"/user",
-        title:"kkk",
-        icon:FaClock,
+        title:"Mon projet",
+        icon:FaHome,
+    },
+    {
+        path:"/chat/user",
+        title: "Message",
+        icon: MdMessage
+    },
+    {
+        path:"/publication/list",
+        title:"Publications",
+        icon:FiFileText,
+    },
+    {
+        path:"/pub/user",
+        title:"Faire une demande",
+        icon:MdEditNote,
     },
     {
         path:"/setting/user",
         title:"Parametres",
         icon:FiSettings
-    },
-      {
-        path:"/chat/user",
-        title: "Message",
-        icon: MdMessage
-    },
-      {
-        path:"/pub/user",
-        title:"Actualites",
-        icon:FiFileText,
     },
     {
         path:"/logout/user",
