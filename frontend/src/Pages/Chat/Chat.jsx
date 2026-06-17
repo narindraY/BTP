@@ -23,6 +23,19 @@ const parseMsg = (msg) => {
   return msg;
 };
 
+const previewText = (contenu) => {
+  if (!contenu) return '';
+  if (typeof contenu !== 'string') return '';
+  const parts = contenu.split('|||');
+  if (parts.length === 4) return '📷 ' + parts[0];
+  if (parts.length === 3) return '📎 ' + parts[0];
+  try {
+    const p = JSON.parse(contenu);
+    if (p?.f) return (p.f.type?.startsWith('image/') ? '📷 ' : '📎 ') + p.t;
+  } catch (_) {}
+  return contenu;
+};
+
 const COLORS = ['#0c7ac4', '#46e789', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
 const colorFromName = (name = '') => {
   let hash = 0;
@@ -90,6 +103,9 @@ export default function Chat() {
   const [ctxMenu, setCtxMenu] = useState({ msg: null, x: 0, y: 0 });
   const [showDiscussions, setShowDiscussions] = useState(true);
   const [search, setSearch] = useState('');
+  const [showNewModal, setShowNewModal] = useState(false);
+  const [clients, setClients] = useState([]);
+  const [newClientId, setNewClientId] = useState('');
 
   const timerRef = useRef(null);
   const bottomRef = useRef(null);
@@ -129,7 +145,7 @@ export default function Chat() {
         setMessages(p => [...p, m]);
         socket.emit('mark_as_read', { discussion_id: m.discussion_id });
       }
-      setDiscussions(p => p.map(d => d.id_discussion === m.discussion_id ? { ...d, last_message: m.contenu } : d));
+      setDiscussions(p => p.map(d => d.id_discussion === m.discussion_id ? { ...d, last_message: m.contenu, last_sender: m.emetteur_id, last_lu: 0 } : d));
     };
     const onTyping = (data) => {
       if (data.discussion_id === selected?.id_discussion && data.utilisateur_id !== user?.id) setOtherTyping(data.nom || 'Quelqu\'un');
@@ -139,6 +155,7 @@ export default function Chat() {
     };
     const onRead = (data) => {
       if (data.discussion_id === selected?.id_discussion) setMessages(p => p.map(m => ({ ...m, lu: 1 })));
+      setDiscussions(p => p.map(d => d.id_discussion === data.discussion_id && d.last_sender === user?.id ? { ...d, last_lu: 1 } : d));
     };
     const onEdited = (data) => {
       if (data.discussion_id === selected?.id_discussion)
@@ -273,6 +290,40 @@ export default function Chat() {
   const handleTouchEnd = () => { clearTimeout(longPressRef.current); };
   const handleTouchMove = () => { clearTimeout(longPressRef.current); };
 
+
+  // ─── Nouvelle discussion ────────────────────────────────────────────
+
+  const fetchClients = async () => {
+    try {
+      const { data } = await axios.get(`${base_url}/chat/clients`, { headers: { Authorization: `Bearer ${token}` } });
+      setClients(data);
+    } catch (e) { console.error(e); }
+  };
+
+
+  const startOwnDiscussion = async () => {
+    try {
+      const { data } = await axios.post(`${base_url}/chat/start`, { client_id: user.id }, { headers: { Authorization: `Bearer ${token}` } });
+      const { data: d } = await axios.get(`${base_url}/chat/discussions`, { headers: { Authorization: `Bearer ${token}` } });
+      setDiscussions(d);
+      const disc = d.find(x => x.id_discussion === data.id_discussion);
+      if (disc) openDiscussion(disc);
+    } catch (e) { console.error(e); }
+  };
+
+  const startNewDiscussion = async () => {
+    if (!newClientId) return;
+    try {
+      const { data } = await axios.post(`${base_url}/chat/start`, { client_id: newClientId }, { headers: { Authorization: `Bearer ${token}` } });
+      const { data: d } = await axios.get(`${base_url}/chat/discussions`, { headers: { Authorization: `Bearer ${token}` } });
+      setDiscussions(d);
+      const disc = d.find(x => x.id_discussion === data.id_discussion);
+      if (disc) openDiscussion(disc);
+      setShowNewModal(false);
+      setNewClientId('');
+    } catch (e) { console.error(e); }
+  };
+
   // ─── Filtrage ─────────────────────────────────────────────────────────
 
   const filteredDiscussions = discussions.filter(d =>
@@ -301,10 +352,10 @@ export default function Chat() {
         <div key={i}
           className={`flex ${mine ? 'justify-end' : 'justify-start'} ${grouped && !newDay ? 'mt-0.5' : 'mt-3'} ${!isDeleted ? 'animate-fadeIn' : ''}`}>
           <div className={`flex ${mine ? 'flex-row-reverse' : 'flex-row'} items-end gap-2 max-w-[80%] md:max-w-[70%]`}>
-            {!grouped || newDay ? <Avatar name={msg.nom} size="sm" /> : <div className="w-8" />}
+            {!grouped || newDay ? <Avatar name={mine ? msg.nom : (isAdmin ? msg.nom : 'Support Entreprise')} size="sm" /> : <div className="w-8" />}
             <div className={`flex flex-col ${mine ? 'items-end' : 'items-start'}`}>
               {(!grouped || newDay) && !mine && !isDeleted && (
-                <span className="text-[10px] font-bold text-gray-500 mb-0.5 ml-1 uppercase">{msg.nom}</span>
+                <span className="text-[10px] font-bold text-gray-500 mb-0.5 ml-1 uppercase">{isAdmin ? msg.nom : 'Support Entreprise'}</span>
               )}
 
               <div onContextMenu={(e) => handleContextMenu(e, msg)}
@@ -421,7 +472,14 @@ export default function Chat() {
         <div className="p-4 border-b border-gray-100">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-bold text-[var(--primary)]">Discussions</h2>
-            <span className="text-[11px] text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full font-medium">{discussions.length}</span>
+            <div className="flex items-center gap-2">
+              {isAdmin && (
+                <button onClick={() => { setShowNewModal(true); if (!clients.length) fetchClients(); }}
+                  className="text-xs bg-[var(--secondary)] text-white px-3 py-1 rounded-full font-medium hover:brightness-90 transition">
+                  + Nouveau
+                </button>
+              )}
+            </div>
           </div>
           <div className="relative">
             <MdSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-base" />
@@ -436,20 +494,28 @@ export default function Chat() {
               {search ? "Aucune discussion trouvée" : "Aucune discussion"}
             </div>
           ) : filteredDiscussions.map(d => {
-            const lastMsg = d.last_message?.split('|||')[0] || '';
+            const lastMsg = previewText(d.last_message);
             return (
               <div key={d.id_discussion} onClick={() => openDiscussion(d)}
                 className={`flex items-center gap-3 p-3.5 cursor-pointer transition border-b border-gray-50 border-l-[3px]
                   ${selected?.id_discussion === d.id_discussion ? 'bg-blue-50/70 border-l-[var(--secondary)]' : 'hover:bg-gray-50 border-l-transparent'}`}>
-                <Avatar name={d.nom} />
+                <Avatar name={isAdmin ? d.nom : 'Support Entreprise'} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <h3 className={`text-sm font-semibold truncate ${selected?.id_discussion === d.id_discussion ? 'text-[var(--secondary)]' : 'text-gray-800'}`}>
-                      {d.nom || 'Client'}
+                      {isAdmin ? (d.nom || 'Client') : 'Support Entreprise'}
                     </h3>
                     {d.non_lu > 0 && <span className="bg-[var(--secondary)] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-2">{d.non_lu}</span>}
                   </div>
-                  {lastMsg && <p className="text-xs text-gray-400 truncate mt-0.5">{lastMsg}</p>}
+                  {lastMsg && (
+                    <div className="flex items-center gap-1">
+                      <p className="text-xs text-gray-400 truncate mt-0.5 flex-1 min-w-0">
+                        {d.last_sender === user?.id && <span className="text-gray-500 font-medium">Vous : </span>}
+                        {lastMsg}
+                      </p>
+                      {d.last_sender === user?.id && <DoubleCheck read={d.last_lu} />}
+                    </div>
+                  )}
                 </div>
               </div>
             );
@@ -467,7 +533,13 @@ export default function Chat() {
               </svg>
             </div>
             <h3 className="text-lg font-bold text-gray-500 mb-1">Messagerie</h3>
-            <p className="text-sm text-gray-400">Sélectionnez une discussion</p>
+            <p className="text-sm text-gray-400">{discussions.length > 0 ? 'Sélectionnez une discussion' : 'Aucune discussion'}</p>
+            {!isAdmin && discussions.length === 0 && (
+              <button onClick={startOwnDiscussion}
+                className="mt-4 px-5 py-2.5 bg-[var(--secondary)] text-white text-sm font-semibold rounded-lg hover:brightness-90 transition">
+                Contacter le support
+              </button>
+            )}
           </div>
         ) : (
           <>
@@ -477,7 +549,7 @@ export default function Chat() {
                 <button onClick={() => setShowDiscussions(true)} className="md:hidden text-gray-500 hover:text-gray-700 p-1">
                   <MdChevronLeft size={24} />
                 </button>
-                <Avatar name={isAdmin ? selected.nom : 'Support'} />
+                <Avatar name={isAdmin ? selected.nom : 'Support Entreprise'} />
                 <div className="min-w-0">
                   <h2 className="font-bold text-gray-800 text-sm truncate">{isAdmin ? (selected.nom || 'Client') : 'Support Entreprise'}</h2>
                   {otherTyping ? (
@@ -490,8 +562,8 @@ export default function Chat() {
                   )}
                 </div>
               </div>
-              <button onClick={() => setShowDiscussions(true)} className="md:hidden text-gray-400 hover:text-gray-600 p-1">
-                <MdMenu size={22} />
+              <button onClick={() => { setSelected(null); setShowDiscussions(true); }} className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 transition">
+                <MdClose size={20} />
               </button>
             </div>
 
@@ -544,6 +616,28 @@ export default function Chat() {
           </>
         )}
       </div>
+
+
+      {/* Modal nouvelle discussion */}
+      {showNewModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={() => setShowNewModal(false)}>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6" onClick={e => e.stopPropagation()}>
+            <h3 className="text-lg font-bold text-gray-800 mb-4">Nouvelle discussion</h3>
+            <label className="block text-xs font-semibold text-gray-600 mb-1">Sélectionnez un client</label>
+            <select value={newClientId} onChange={e => setNewClientId(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-[var(--secondary)] bg-white mb-4">
+              <option value="">Choisir un client...</option>
+              {clients.map(c => <option key={c.id_utilisateur} value={c.id_utilisateur}>{c.nom} ({c.email})</option>)}
+            </select>
+            <div className="flex gap-3">
+              <button onClick={() => setShowNewModal(false)}
+                className="flex-1 px-4 py-2.5 rounded-lg border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50">Annuler</button>
+              <button onClick={startNewDiscussion} disabled={!newClientId}
+                className="flex-1 px-4 py-2.5 rounded-lg bg-[var(--secondary)] text-white text-sm font-semibold hover:brightness-90 disabled:opacity-50 transition">Démarrer</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {renderContextMenu()}
 

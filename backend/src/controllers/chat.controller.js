@@ -32,11 +32,19 @@ const getDiscussions = (req, res) => {
     const { id: utilisateur_id, role } = req.user;
     req.getConnection((err, connection) => {
         if (err) return res.status(500).json({ error: "Erreur de connexion DB" });
+        const baseSelect = `SELECT d.*, u.nom,
+          (SELECT m.contenu FROM message m WHERE m.discussion_id = d.id_discussion AND m.is_deleted = 0 ORDER BY m.date_creation DESC LIMIT 1) as last_message,
+          (SELECT m.utilisateur_id FROM message m WHERE m.discussion_id = d.id_discussion AND m.is_deleted = 0 ORDER BY m.date_creation DESC LIMIT 1) as last_sender,
+          (SELECT m.lu FROM message m WHERE m.discussion_id = d.id_discussion AND m.is_deleted = 0 ORDER BY m.date_creation DESC LIMIT 1) as last_lu,
+          (SELECT COUNT(*) FROM message m WHERE m.discussion_id = d.id_discussion AND m.utilisateur_id != ? AND m.lu = 0) as non_lu
+          FROM discussion d JOIN utilisateur u ON d.client_id = u.id_utilisateur`;
         const sql = role === 'admin'
-        const sql = role === 'admin'
-            ? "SELECT d.*, u.nom FROM discussion d JOIN utilisateur u ON d.client_id = u.id_utilisateur"
-            : "SELECT d.*, u.nom FROM discussion d JOIN utilisateur u ON d.client_id = u.id_utilisateur WHERE d.client_id = ? OR d.id_discussion IN (SELECT discussion_id FROM message WHERE utilisateur_id = ?)";
-        connection.query(sql, [utilisateur_id, utilisateur_id], (err, results) => {
+            ? baseSelect
+            : baseSelect + " WHERE d.client_id = ? OR d.id_discussion IN (SELECT discussion_id FROM message WHERE utilisateur_id = ?)";
+        const params = role === 'admin'
+            ? [utilisateur_id]
+            : [utilisateur_id, utilisateur_id, utilisateur_id];
+        connection.query(sql, params, (err, results) => {
             if (err) return res.status(500).json({ error: err.message });
             res.json(results);
         });
@@ -45,20 +53,30 @@ const getDiscussions = (req, res) => {
 
 const startDiscussion = (req, res) => {
     const { client_id } = req.body;
-    const my_id = req.user.id;
     if (!client_id) return res.status(400).json({ error: "Client ID requis" });
     req.getConnection(async (err, connection) => {
         if (err) return res.status(500).json({ error: "Erreur de connexion DB" });
-        connection.query("SELECT * FROM discussion WHERE client_id = ?", [my_id], (err, results) => {
+        connection.query("SELECT * FROM discussion WHERE client_id = ?", [client_id], (err, results) => {
             if (err) return res.status(500).json({ error: err.message });
             if (results.length > 0) {
                 res.json({ id_discussion: results[0].id_discussion });
             } else {
-                connection.query("INSERT INTO discussion (client_id, statut) VALUES (?, 'ouverte')", [my_id], (err, result) => {
+                connection.query("INSERT INTO discussion (client_id, statut) VALUES (?, 'ouverte')", [client_id], (err, result) => {
                     if (err) return res.status(500).json({ error: err.message });
                     res.status(201).json({ id_discussion: result.insertId });
                 });
             }
+        });
+    });
+};
+
+// Lister les clients (pour créer une discussion)
+const getClients = (req, res) => {
+    req.getConnection((err, connection) => {
+        if (err) return res.status(500).json({ error: "Erreur de connexion DB" });
+        connection.query("SELECT id_utilisateur, nom, email FROM utilisateur WHERE role = 'client' ORDER BY nom", (err, rows) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json(rows);
         });
     });
 };
@@ -99,4 +117,4 @@ const deleteMessage = (req, res) => {
     });
 };
 
-module.exports = { postMessage, getHistory, getDiscussions, startDiscussion, uploadFile, editMessage, deleteMessage };
+module.exports = { postMessage, getHistory, getDiscussions, startDiscussion, uploadFile, editMessage, deleteMessage, getClients };
