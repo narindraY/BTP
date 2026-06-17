@@ -93,4 +93,16 @@ const findUserById = (connection, id) => {
     });
 };
 
-module.exports = { findUserById, createUser, findUser, findUserByGoogleId, findUserByContact,createGoogleUser,updateUser,deleteUser };
+const findAllUsers = (connection) => {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            "SELECT id_user, nom_user, contact, role, provider FROM user WHERE role = 'user'",
+            (err, res) => {
+                if (err) return reject(err);
+                resolve(res);
+            }
+        );
+    });
+};
+
+module.exports = {findAllUsers, findUserById, createUser, findUser, findUserByGoogleId, findUserByContact,createGoogleUser,updateUser,deleteUser };

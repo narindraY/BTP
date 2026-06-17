@@ -20,6 +20,7 @@ exports.createContrat = (req, res) => {
 
 // 📄 Lire tous les contrats (avec recherche)
 exports.getContrats = (req, res) => {
+ 
   const { search } = req.query;
 
   let sql = `
@@ -54,6 +55,7 @@ exports.getContrats = (req, res) => {
 // 🔍 Lire un contrat par ID
 exports.getContratById = (req, res) => {
   const { id } = req.params;
+  
   db.query("SELECT * FROM CONTRAT WHERE id_contrat=?", [id], (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
     if (rows.length === 0) return res.status(404).json({ message: "Contrat introuvable ❌" });

@@ -15,6 +15,7 @@ const MonProjet = () => {
     const loadMyProjects = async () => {
       try {
         const token = localStorage.getItem('token');
+        console.log("token", token)
         const res = await axios.get(`${base_url}/my-projects`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -22,11 +23,13 @@ const MonProjet = () => {
         const list = Array.isArray(res.data)
           ? res.data
           : res.data?.data ?? res.data?.projects ?? [];
-
+          console.log("okey", res.data?.data)
+          console.log("REPONSE COMPLETE:", res.data);
         setProjects(list);
       } catch (err) {
         console.error('Erreur chargement projets:', err);
         setError('Impossible de charger vos projets.');
+        console.log("error", error)
       } finally {
         setLoading(false);
       }

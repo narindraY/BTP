@@ -2,6 +2,7 @@ import  { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import { FiPlus, FiEdit2, FiTrash2 } from "react-icons/fi";
+import { url } from "../../Utils/IP";
 
 export default function SuiviList() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ export default function SuiviList() {
     try {
       const res = await api.get("/suivis");
       setSuivis(res.data);
+      console.log("SUIVI:", res.data);
     } catch (err) {
       console.error("Erreur fetch suivis:", err);
     }
@@ -38,7 +40,7 @@ export default function SuiviList() {
   <div className="flex items-center justify-between mb-6">
     <h2 className="text-2xl font-bold text-gray-800">Suivi des Travaux</h2>
     <button
-      onClick={() => navigate("/suivis/add")}
+      onClick={() => navigate("/suivi/add")}
       className="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--hoover)] text-white hover:text-[var(--primary)] px-4 py-2 rounded-lg shadow-sm transition-colors"
     >
       <FiPlus size={18} />
@@ -53,6 +55,7 @@ export default function SuiviList() {
           <th className="px-4 py-3">Avancement</th>
           <th className="px-4 py-3">Commentaire</th>
           <th className="px-4 py-3">Date</th>
+          <th className="px-4 py-3"> Image </th>
           <th className="px-4 py-3 text-center">Actions</th>
         </tr>
       </thead>
@@ -69,6 +72,17 @@ export default function SuiviList() {
             <td className="px-4 py-3 text-gray-500">
               {s.created_at ? new Date(s.created_at).toLocaleDateString() : ""}
             </td>
+            <td className="px-4 py-3" >
+             <img
+  src={
+    s.photo
+      ? `${url}${s.photo}`
+      : "/no-image.png"
+  }
+  alt="image"
+  className="w-20 h-20 object-cover rounded"
+/>
+               </td>
             <td className="px-4 py-3">
               <div className="flex items-center justify-center gap-2">
                 <button

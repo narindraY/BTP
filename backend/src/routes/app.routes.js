@@ -3,7 +3,7 @@ const router = express.Router();
 //const passport = require("passport");
 const passport = require("../config/passport")
 
-const { register, loginUser, googleAuth, deleteUser, updateUser, getMe } = require("../controllers/user.controller");
+const { register, loginUser, googleAuth, deleteUser, updateUser, getMe,getUsers } = require("../controllers/user.controller");
 //router.get("/me", getMe)
 const { validateRegister } = require("../validation/user.validation");
 const auth = require("../middleware/auth");
@@ -52,13 +52,14 @@ router.post("/publication/create", upload.single("img"), createPub);
 router.get("/publication/list", listPub);
 router.delete("/delete/user", deleteUser);
 router.put("/update/user/:id", updateUser)
-router.get("/me", auth, getMe)
+router.get("/me", auth, getMe);
+router.get("/users", getUsers)
 
 //Narindra
 router.get('/projects',projectController.getAllProjects);
 router.post('/create/projects',projectController.createProject);
 //iooo eee
-router.get('/my-projects', authMiddleware, projectController.getMyProjects);
+router.get('/my-projects', auth, projectController.getMyProjects);
 // 
 router.get('/get/contrats', projectController.getAllContrats);
 router.get('/:id/detail', projectController.getProjectDetail);
@@ -74,18 +75,18 @@ router.post("/create/suivis", upload.single("file"), suiviController.createSuivi
 router.get("/suivis", suiviController.getSuivis);
 router.get("/id/:id", suiviController.getSuiviById);
 router.put("/:id", upload.single("file"), suiviController.updateSuivi);
-router.delete("/:id", suiviController.deleteSuivi);
+router.delete("/suivis/:id", suiviController.deleteSuivi);
 router.post("/contrat/create", contratController.createContrat);
-router.get("/", contratController.getContrats);
-router.get("/:id", contratController.getContratById);
+//router.get("/kk", contratController.getContrats);
+router.get("/contrats/:id", contratController.getContratById);
 router.put("/:id", contratController.updateContrat);
-router.delete("/:id", contratController.deleteContrat);
+router.delete("/delete/contrats/:id", contratController.deleteContrat);
 
 router.get("/rapports/journalier/pdf", rapportController.generateRapportJournalier);
 router.get("/rapports/mensuel/pdf", rapportController.generateRapportMensuel);
 router.get("/rapports/financier/pdf", rapportController.generateRapportFinancier);
 
-module.exports = router;
+
 
 
 // Routes pour le Chat
@@ -105,8 +106,5 @@ router.get("/admin", admin);
 router.post("/send/contact", sendContact);
 
 router.post("/logout", logout);
-
-module.exports = router;
-
 
 module.exports = router;

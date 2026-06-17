@@ -22,7 +22,7 @@ function Sidebar() {
   };
 
   return (
-    <aside className="w-16 sm:w-50 h-screen bg-gray-800 text-white">
+    <aside className="w-16 sm:w-50  h-screen bg-gray-800 text-white">
       <Dialog
         isOpen={openLogout}
         title="Déconnexion"

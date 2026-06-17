@@ -1,4 +1,3 @@
-import React from 'react';
 
 const IconEdit = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -79,9 +78,7 @@ const ResourceTable = ({ resources = [], loading = false, onEdit, onDelete }) =>
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1.5">
-
-                    <button
-                      onClick={() => onEdit(item)}
+                    <button onClick={() => onEdit(item)}
                       title="Modifier"
                       className="w-7 h-7 flex items-center justify-center rounded-lg transition-all duration-150"
                       style={{ color: "rgba(6,11,39,0.4)", border: "0.5px solid rgba(6,11,39,0.10)" }}

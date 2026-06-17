@@ -1,6 +1,7 @@
 import { FaCheck, FaClock, FaHome } from "react-icons/fa";
 import{ FiBook, FiDollarSign, FiFileText, FiHome, FiSettings} from "react-icons/fi"
 import { MdAddCircleOutline, MdLogout, MdMessage, MdPerson } from "react-icons/md";
+
 export const SidebarItems = [
     {
         path:"/dashboard",
@@ -8,14 +9,14 @@ export const SidebarItems = [
         icon: FiHome,
     },
     {
-        path:"/projets",
-        title:"Projets",
-        icon:FaHome,
-    },
-    {
         path:"/contrats",
         title:"Contrat",
         icon:FiFileText
+    },
+    {
+        path:"/projets",
+        title:"Projets",
+        icon:FaHome,
     },
     {
         path:"/suivi",
@@ -23,14 +24,14 @@ export const SidebarItems = [
         icon:FaCheck
     },
     {
-        path:"/finance",
-        title:"Finance",
-        icon: FiDollarSign,
-    },
-    {
         path:"/ressources",
         title:"Ressources",
         icon:FiBook,
+    },
+    {
+        path:"/finance",
+        title:"Finance",
+        icon: FiDollarSign,
     },
     {
         path:"/chat",
@@ -38,19 +39,9 @@ export const SidebarItems = [
         icon: MdMessage
     },
     {
-        path:"/rapports",
-        title:"Rapport",
-        icon:MdAddCircleOutline,
-    },
-    {
         path:"/publication/list",
         title:"Publication",
         icon:FiFileText,
-    },
-    {
-        path:"/parametres",
-        title:"Parametres",
-        icon:FiSettings
     },
       {
         path:"/logout",
@@ -60,16 +51,10 @@ export const SidebarItems = [
 ];
 
 export const ItemesUsers = [
-    
     {
-        path:"/user",
-        title:"kkk",
-        icon:FaClock,
-    },
-    {
-        path:"/setting/user",
-        title:"Parametres",
-        icon:FiSettings
+        path:"/mes-projets",
+        title:"Projets",
+        icon: FiHome,
     },
       {
         path:"/chat/user",

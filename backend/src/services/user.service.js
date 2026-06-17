@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const {
     createUser, findUser, findUserByContact,
     findUserByGoogleId, createGoogleUser,
-    updateUser, deleteUser,findUserById
+    updateUser, deleteUser,findUserById, findAllUsers
 } = require("../models/user.models");
 const generateToken = require("../utils/generateToken");
 
@@ -14,6 +14,9 @@ const registerUser = async (connection, data) => {
         password: hash
     };
     return await createUser(connection, userData);
+};
+const getAllUsers = async (connection) => {
+    return await findAllUsers(connection);
 };
 
 const login = async (connection, contact, password) => {
@@ -100,4 +103,4 @@ const getProfile = async (connection, id) => {
 };
 
 
-module.exports = {getProfile, registerUser, login, googleLogin, editUser, removeUser };
+module.exports = {getAllUsers,getProfile, registerUser, login, googleLogin, editUser, removeUser };

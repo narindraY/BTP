@@ -1,5 +1,5 @@
 import { FaBuilding } from "react-icons/fa";
-import { FiArrowRight, FiCalendar, FiDollarSign } from "react-icons/fi";
+import {  FiCalendar, FiDollarSign } from "react-icons/fi";
 
 const STATUS_CFG = {
   "En cours":   { bg: "rgba(12,122,196,0.10)",  text: "var(--secondary)" },
@@ -84,17 +84,6 @@ const ProjectCard = ({ project, onClick }) => {
             </div>
           ))}
         </div>
-      </div>
-
-      <div
-        className="flex items-center justify-center gap-1.5 py-2.5 text-[12px] font-semibold"
-        style={{
-          borderTop:  "0.5px solid rgba(6,11,39,0.07)",
-          color:      "var(--secondary)",
-          background: "rgba(12,122,196,0.03)",
-        }}
-      >
-        Voir les détails <FiArrowRight size={13} />
       </div>
     </div>
   );

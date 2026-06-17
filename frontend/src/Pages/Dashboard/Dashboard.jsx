@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FiRefreshCw } from 'react-icons/fi';
+//import { FiRefreshCw } from 'react-icons/fi';
 import StatCards from '../../components/dashboard/StatCards';
 import ProgressChart from '../../components/dashboard/ProgressChart';
 import { base_url } from '../../Utils/IP';
+import RapportButtons from '../../Components/rapports/RapportButtons';
 
 const fmtDate = (d) => {
   if (!d) return "—";
@@ -94,6 +95,7 @@ const Dashboard = () => {
         ? projRes.data
         : projRes.data?.data ?? projRes.data?.projects ?? [];
       setProjets(list.slice(0, 5));
+      console.log("list:", list.slice(0,5))
     } catch (err) {
       console.error("Erreur dashboard:", err);
     }
@@ -109,6 +111,7 @@ const Dashboard = () => {
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">Tableau de bord</h1>
       </div>
+      <div className='text-left'><RapportButtons/></div>
       <StatCards stats={stats} />
       <ProgressChart projects={projets} />
       <RecentProjects projects={projets} />

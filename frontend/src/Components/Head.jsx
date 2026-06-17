@@ -24,12 +24,12 @@ function Head() {
     }, [])
 
     return (
-        <div className="w-full h-18 bg-[var(--primary)] flex justify-between items-center px-4">
+        <div className="w-full h-18 bg-gray-200 flex justify-between items-center px-4">
             <div className="flex items-center gap-2">
-                <img src={logo} className="w-12 h-12" />
-                <p className="text-white text-2xl italic">Structura</p>
+                <img src={logo} className="w-50 h-25" />
+                
             </div>
-            <div className="flex items-center gap-2 text-white">
+            <div className="flex items-center font-bold gap-2 text-gray-800">
                 <FiUser size={18} />
                 <p>{data.nom_user}</p>
             </div>

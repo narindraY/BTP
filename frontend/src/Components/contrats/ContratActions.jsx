@@ -11,7 +11,7 @@ export default function ContratActions({ onAdd, onSearch }) {
       />
       <button
         onClick={onAdd}
-        className="flex items-center gap-2 px-4 py-2.5 bg-[var(--primary)] cursor-pointer active:scale-95 text-white text-sm font-semibold rounded-lg transition-all"
+        className="flex items-center gap-2 px-4 py-2.5 bg-[var(--primary)] cursor-pointer active:scale-95 text-white text-sm font-semibold rounded-lg transition-all hover:bg-[var(--hoover)] hover:text-[var(--primary)]"
       >
         <span className="text-base leading-none"> <FaPlus size={18}/> </span>
         <p>Nouveau contrat</p>

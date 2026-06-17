@@ -28,9 +28,9 @@ const createMessage = (connection, data) => {
 const getMessagesByDiscussion = (connection, discussionId) => {
     return new Promise((resolve, reject) => {
         const sql = `
-            SELECT m.*, u.nom
+            SELECT m.*, u.nom_user
             FROM message m
-            JOIN utilisateur u ON m.utilisateur_id = u.id_utilisateur
+            JOIN user u ON m.utilisateur_id = u.id_user
             WHERE m.discussion_id = ?
             ORDER BY m.date_creation ASC
         `;

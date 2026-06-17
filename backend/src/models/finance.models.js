@@ -12,7 +12,7 @@ const findBudget = (connection) =>{
 };
 const findDSpending = (connection) =>{
     return new Promise((resolve, reject) =>{
-        connection.query("SELECT SUM(quantite * prix_unitaire) AS spending FROM ressource",
+        connection.query("SELECT p.id_projet, p.nom_projet, COALESCE(SUM(r.quantite * r.prix_unitaire),0) AS spending FROM projet p LEFT JOIN ressource r ON r.projet_id = p.id_projet GROUP BY p.id_projet, p.nom_projet",
             (err, result) =>{
                 if (err) {
                     return reject(err);
@@ -24,15 +24,25 @@ const findDSpending = (connection) =>{
 };
 
 const findBalance = (connection) =>{
-    return new Promise((resolve, reject)=>{
-        connection.query("SELECT c.budget - COALESCE(SUM(r.quantite * r.prix_unitaire), 0) AS reste_budget FROM projet p JOIN contrat c ON p.contrat_id = c.id_contrat LEFT JOIN ressource r ON r.projet_id = p.id_projet GROUP BY c.budget",
-    (err, result) => {
-        if (err) {
-            return reject(err);
-        }
-        resolve(result)
-    }
-        );
-});
+ return new Promise((resolve,reject)=>{
+  connection.query(`
+    SELECT
+      p.id_projet,
+      p.nom_projet,
+      c.budget,
+      c.budget - COALESCE(SUM(r.quantite * r.prix_unitaire),0) AS reste_budget
+    FROM projet p
+    JOIN contrat c ON p.contrat_id = c.id_contrat
+    LEFT JOIN ressource r ON r.projet_id = p.id_projet
+    GROUP BY 
+      p.id_projet,
+      p.nom_projet,
+      c.budget
+  `,
+  (err,result)=>{
+    if(err) return reject(err);
+    resolve(result);
+  });
+ });
 };
 module.exports = {findBudget, findDSpending, findBalance}; 

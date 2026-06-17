@@ -48,8 +48,8 @@ function Header() {
     <>
       <div className="w-full h-18 bg-[var(--primary)] flex items-center justify-between px-4">
         <button onClick={() => navigate("/")} className="flex items-center gap-3">
-          <img src={logo} className="w-20 h-20" />
-          <p className="text-white text-2xl italic">Structura</p>
+          <img src={logo} className="w-30 h-25" />
+      
         </button>
         <div>
           <button onClick={handlePub}

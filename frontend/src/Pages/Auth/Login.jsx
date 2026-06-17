@@ -1,7 +1,7 @@
 import axios from "axios";
 import { base_url } from "../../Utils/IP";
 import { useState } from "react";
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import { FiLogIn } from "react-icons/fi";
 
@@ -32,7 +32,7 @@ function Login({ onSwitchToRegister }) {
             if (role === "admin") {
                 navigate("/dashboard");
             } else {
-                navigate("/user");
+                navigate("/mes-projets");
             }
         } catch (error) {
             console.log('error', error);
@@ -101,15 +101,15 @@ function Login({ onSwitchToRegister }) {
                 Continuer avec Google
             </button>
 
-             <p className="text-white/70 text-sm flex gap-1 mt-6">
-            Pas encore de compte ?
-            <button
-                onClick={onSwitchToRegister}
-                className="text-[var(--secondary)] hover:underline cursor-pointer font-medium bg-transparent border-none"
-            >
-                S'inscrire
-            </button>
-        </p>
+            <p className="text-white/70 text-sm flex gap-1 mt-6">
+                Pas encore de compte ?
+                <button
+                    onClick={onSwitchToRegister}
+                    className="text-[var(--secondary)] hover:underline cursor-pointer font-medium bg-transparent border-none"
+                >
+                    S'inscrire
+                </button>
+            </p>
         </div>
     );
 }

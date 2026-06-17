@@ -3,7 +3,7 @@ const {
     login,
     googleLogin,
     editUser,
-    removeUser,getProfile
+    removeUser,getProfile,getAllUsers
 } = require("../services/user.service");
 const generateToken = require("../utils/generateToken");
 
@@ -18,6 +18,18 @@ const register = (req, res) => {
             });
         } catch (error) {
             res.status(500).json(error);
+        }
+    });
+};
+const getUsers = (req, res) => {
+    req.getConnection(async (err, connection) => {
+        if (err) return res.status(500).json({ message: "Erreur de connexion" });
+
+        try {
+            const users = await getAllUsers(connection);
+            res.json(users);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
     });
 };
@@ -109,4 +121,4 @@ const getMe = (req, res) => {
     });
 };
 
-module.exports = {getMe, register, loginUser, googleAuth, updateUser, deleteUser };
+module.exports = {getUsers,getMe, register, loginUser, googleAuth, updateUser, deleteUser };

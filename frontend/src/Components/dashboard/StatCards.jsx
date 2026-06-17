@@ -22,58 +22,46 @@ const CARDS = [
     icon:   <FiDollarSign size={15} />,
     format: v => Number(v).toLocaleString("fr-FR"),
   },
+ 
+];
+
+const VARIANTS = [
   {
-    key:    "avancementMoyen",
-    label:  "Avancement moyen",
-    sub:    "progression globale",
-    icon:   <FiTrendingUp size={15} />,
-    format: v => `${Math.round(Number(v) || 0)} %`,
+    bar:     "bg-[#0c7ac4]",
+    iconBg:  "bg-[#0c7ac4]/10",
+    iconTxt: "text-[#0c7ac4]",
+    valTxt:  "text-[#0c7ac4]",
+  },
+  {
+    bar:     "bg-[#46e789]",
+    iconBg:  "bg-[#46e789]/15",
+    iconTxt: "text-[#46e789]",
+    valTxt:  "text-[#46e789]",
   },
 ];
 
 const StatCard = ({ label, sub, icon, format, value, index }) => {
-  const accentVar  = index % 2 === 0 ? "var(--secondary)" : "var(--hoover)";
-  const accentBg   = index % 2 === 0
-    ? "rgba(12,122,196,0.08)"
-    : "rgba(70,231,137,0.12)";
+  const v = VARIANTS[index % 2];
 
   return (
-    <div
-      className="relative flex flex-col gap-3 rounded-xl p-5 overflow-hidden"
-      style={{
-        background:  "var(--bg)",
-        border:      "0.5px solid rgba(6,11,39,0.10)",
-        boxShadow:   "0 1px 6px rgba(6,11,39,0.06)",
-      }}
-    >
-      <div
-        className="absolute top-0 left-0 right-0"
-        style={{ height: 3, background: accentVar }}
-      />
+    <div className="relative flex flex-col gap-3 rounded-xl p-5 overflow-hidden bg-white border border-black/10 shadow-sm">
+      {/* barre colorée en haut */}
+      <div className={`absolute top-0 left-0 right-0 h-[3px] ${v.bar}`} />
 
       <div className="flex items-center gap-2 pt-1">
-        <div
-          className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-          style={{ background: accentBg, color: accentVar }}
-        >
+        <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${v.iconBg} ${v.iconTxt}`}>
           {icon}
         </div>
-        <span
-          className="text-[11px] font-bold uppercase tracking-widest"
-          style={{ color: "var(--primary)" }}
-        >
+        <span className="text-[11px] font-bold uppercase tracking-widest text-[#060b27]">
           {label}
         </span>
       </div>
 
       <div>
-        <div
-          className="font-mono font-semibold leading-none"
-          style={{ fontSize: 22, color: accentVar }}
-        >
+        <div className={`font-mono font-semibold text-[22px] leading-none ${v.valTxt}`}>
           {format(value ?? 0)}
         </div>
-        <div className="text-[11px] mt-1" style={{ color: "rgba(6,11,39,0.38)" }}>
+        <div className="text-[11px] mt-1 text-black/40">
           {sub}
         </div>
       </div>

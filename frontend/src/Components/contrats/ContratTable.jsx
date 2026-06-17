@@ -1,86 +1,150 @@
-import { FiEye, FiEdit2, FiTrash2 } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 
-const fmtDate  = (d) => d ? new Date(d).toLocaleDateString("fr-FR") : "—";
-const fmtBudget = (b) => `${Number(b || 0).toLocaleString("fr-FR")} FCFA`;
 
-const COLS = ["Référence", "Client", "Type", "Budget", "Date début", "Date fin", "Description", "Actions"];
+const fmtDate = (d) =>
+  d ? new Date(d).toLocaleDateString("fr-FR") : "—";
 
-const ActionBtn = ({ icon, color, onClick }) => (
-  <button
-    onClick={onClick}
-    className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-150"
-    style={{ background: `${color}12`, color, border: `0.5px solid ${color}30` }}
-  >
-    {icon}
-  </button>
-);
 
-export default function ContratTable({ contrats, onView, onEdit, onDelete }) {
+const fmtBudget = (b) =>
+  `${Number(b || 0).toLocaleString("fr-FR")} FCFA`;
+
+
+const COLS = [
+  "Référence",
+  "Client",
+  "Type",
+  "Budget",
+  "Date début",
+  "Date fin",
+  "Description",
+  "Actions"
+];
+
+
+export default function ContratTable({
+  contratos,
+  contrats,
+  onDelete
+}) {
+
+  const data = contratos || contrats || [];
+
+
   return (
-    <div className="w-full overflow-x-auto rounded-xl" style={{ border: "0.5px solid rgba(6,11,39,0.1)" }}>
+    <div
+      className="w-full overflow-x-auto rounded-xl"
+      style={{
+        border:"0.5px solid rgba(6,11,39,0.1)"
+      }}
+    >
+
       <table className="w-full text-[13px] border-collapse">
 
+
         <thead>
-          <tr style={{ borderBottom: "0.5px solid rgba(6,11,39,0.08)", background: "rgba(6,11,39,0.02)" }}>
+
+          <tr
+            style={{
+              borderBottom:"0.5px solid rgba(6,11,39,0.08)",
+              background:"rgba(6,11,39,0.02)"
+            }}
+          >
+
             {COLS.map(col => (
               <th
                 key={col}
-                className="text-left px-4 py-3 text-[11px] font-semibold uppercase tracking-wide whitespace-nowrap"
-                style={{ color: "rgba(6,11,39,0.4)" }}
+                className="text-left px-4 py-3 text-[11px] font-semibold uppercase"
               >
                 {col}
               </th>
             ))}
+
           </tr>
+
         </thead>
 
+
         <tbody>
-          {contrats.map((c, i) => (
+
+          {data.map((c,i)=>(
+
             <tr
               key={c.id_contrat}
               style={{
-                borderBottom: i < contrats.length - 1 ? "0.5px solid rgba(6,11,39,0.06)" : "none",
-                background: "var(--bg)",
+                borderBottom:
+                i < data.length-1
+                ? "0.5px solid rgba(6,11,39,0.06)"
+                : "none"
               }}
             >
-              <td className="px-4 py-3 font-semibold tabular-nums" style={{ color: "var(--secondary)" }}>
+
+
+              <td className="px-4 py-3 font-semibold">
                 CT-{c.id_contrat}
               </td>
-              <td className="px-4 py-3 font-medium whitespace-nowrap" style={{ color: "var(--primary)" }}>
+
+
+              <td className="px-4 py-3">
                 {c.client}
               </td>
+
+
               <td className="px-4 py-3">
-                <span
-                  className="text-[11px] font-semibold px-2.5 py-1 rounded-md whitespace-nowrap"
-                  style={{ background: "rgba(12,122,196,0.08)", color: "var(--secondary)" }}
-                >
-                  {c.type_contrat}
-                </span>
+                {c.type_contrat}
               </td>
-              <td className="px-4 py-3 font-semibold tabular-nums whitespace-nowrap" style={{ color: "var(--primary)" }}>
+
+
+              <td className="px-4 py-3">
                 {fmtBudget(c.budget)}
               </td>
-              <td className="px-4 py-3 tabular-nums whitespace-nowrap" style={{ color: "rgba(6,11,39,0.5)" }}>
+
+
+              <td className="px-4 py-3">
                 {fmtDate(c.date_debut)}
               </td>
-              <td className="px-4 py-3 tabular-nums whitespace-nowrap" style={{ color: "rgba(6,11,39,0.5)" }}>
+
+
+              <td className="px-4 py-3">
                 {fmtDate(c.date_fin)}
               </td>
-              <td className="px-4 py-3 max-w-[180px]" style={{ color: "rgba(6,11,39,0.5)" }}>
-                <span className="block truncate">{c.description || "—"}</span>
+
+
+              <td className="px-4 py-3 max-w-[180px]">
+                <span className="truncate block">
+                  {c.description || "—"}
+                </span>
               </td>
+
+
               <td className="px-4 py-3">
-                <div className="flex items-center gap-1.5">
-                  <ActionBtn icon={<FiEye size={13} />}    color="var(--secondary)" onClick={() => onView(c)} />
-                  <ActionBtn icon={<FiEdit2 size={13} />}  color="var(--primary)"   onClick={() => onEdit(c)} />
-                  <ActionBtn icon={<FiTrash2 size={13} />} color="var(--error)"     onClick={() => onDelete(c.id_contrat)} />
-                </div>
+
+                <button
+                  onClick={()=>onDelete(c)}
+                  className="
+                    px-4 py-2 rounded
+                    bg-red-500 text-white
+                    flex items-center gap-2
+                  "
+                >
+
+                  <FiTrash2/>
+
+                  Supprimer
+
+                </button>
+
               </td>
+
+
             </tr>
+
           ))}
+
         </tbody>
 
+
       </table>
+
     </div>
   );
 }
